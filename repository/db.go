@@ -22,11 +22,12 @@ func init() {
 	}
 
 	DB.Migrator().DropTable(&User{})
+	DB.Migrator().DropTable(&Spot{})
 
 	DB.AutoMigrate(&User{})
-	// DB.AutoMigrate(&Spot{})
+	DB.AutoMigrate(&Spot{})
 
-	user := []User{
+	users := []User{
 		{
 			Name:       "tester1",
 			Email:      "tester1@bike_noritai_dev",
@@ -48,5 +49,37 @@ func init() {
 			Experience: 10,
 		},
 	}
-	DB.Create(&user)
+	DB.Create(&users)
+
+	spots := []Spot{
+		{
+			UserID:      1,
+			Name:        "豊受大神宮 (伊勢神宮 外宮）",
+			Image:       "http://test.com",
+			Type:        "観光",
+			Address:     "三重県伊勢市豊川町２７９",
+			HpURL:       "https://www.isejingu.or.jp/about/geku/",
+			OpenTime:    "5:00~18:00",
+			OffDay:      "",
+			Parking:     true,
+			Description: "外宮から行くのが良いみたいですよ。",
+			Lat:         34.48786428571363,
+			Lng:         136.70372958477844,
+		},
+		{
+			UserID:      1,
+			Name:        "伊勢神宮（内宮）",
+			Image:       "http://test.com",
+			Type:        "観光",
+			Address:     "三重県伊勢市宇治館町１",
+			HpURL:       "https://www.isejingu.or.jp/",
+			OpenTime:    "5:00~18:00",
+			OffDay:      "",
+			Parking:     true,
+			Description: "日本最大の由緒正しき神社です。",
+			Lat:         34.45616423029016,
+			Lng:         136.7258739014393,
+		},
+	}
+	DB.Create(&spots)
 }
