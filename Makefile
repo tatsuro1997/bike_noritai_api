@@ -15,3 +15,6 @@ bash:
 
 db:
 	docker exec -it db bash
+
+fmt:
+	docker-compose exec api gofmt -l -s -w .
