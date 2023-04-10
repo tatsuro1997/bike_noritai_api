@@ -3,6 +3,7 @@ package repository
 import (
 	"log"
 
+	. "bike_noritai_api/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -20,6 +21,6 @@ func init() {
 		log.Fatalln(dsn + "database can't connect")
 	}
 
-	// DB.AutoMigrate(&User{})
+	DB.AutoMigrate(&User{})
 	// DB.AutoMigrate(&Spot{})
 }
