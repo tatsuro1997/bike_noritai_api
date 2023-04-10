@@ -4,6 +4,8 @@ import "time"
 
 type Spot struct {
 	ID          int64     `json:"id"`
+	UserID      int64     `json:"user_id"`
+	User        User      `json:"user"`
 	Name        string    `json:"name"`
 	Image       string    `json:"image"`
 	Type        string    `json:"type"`
