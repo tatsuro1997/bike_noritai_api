@@ -1,20 +1,15 @@
 package main
 
 import (
-	. "bike_noritai_api/handler"
-	. "bike_noritai_api/repository"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	rep "bike_noritai_api/repository"
+	"bike_noritai_api/router"
 )
 
 func main() {
-	e := echo.New()
-	e.Use(middleware.CORS())
-
-	db, _ := DB.DB()
+	db, _ := rep.DB.DB()
 	defer db.Close()
 
-	e.GET("/api/users", GetUsers)
+	e := router.NewRouter()
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
