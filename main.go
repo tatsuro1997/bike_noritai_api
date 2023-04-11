@@ -1,6 +1,7 @@
 package main
 
 import (
+	. "bike_noritai_api/handler"
 	. "bike_noritai_api/repository"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -12,6 +13,8 @@ func main() {
 
 	db, _ := DB.DB()
 	defer db.Close()
+
+	e.GET("/api/users", GetUsers)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
