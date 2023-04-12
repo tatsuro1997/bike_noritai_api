@@ -13,7 +13,14 @@ import (
 
 func GetUsers(c echo.Context) error {
 	users := []User{}
-	DB.Find(&users)
+
+	if err := DB.Find(&users).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(http.StatusNotFound, "users not found")
+		}
+		return err
+	}
+
 	return c.JSON(http.StatusOK, users)
 }
 
