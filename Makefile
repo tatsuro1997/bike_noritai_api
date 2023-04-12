@@ -2,7 +2,7 @@ build:
 	docker-compose build
 
 up:
-	docker-compose up
+	docker compose run --rm api
 
 stop:
 	docker-compose stop
@@ -17,4 +17,4 @@ db:
 	docker exec -it db bash
 
 fmt:
-	docker-compose exec api gofmt -l -s -w .
+	docker compose run --rm api gofmt -l -s -w .
