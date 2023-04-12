@@ -12,6 +12,7 @@ func NewRouter() *echo.Echo {
 	e.Use(middleware.CORS())
 
 	e.GET("/api/users", handler.GetUsers)
+	e.GET("/api/users/:user_id", handler.GetUser)
 
 	return e
 }
