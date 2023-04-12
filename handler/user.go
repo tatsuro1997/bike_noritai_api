@@ -41,3 +41,14 @@ func GetUser(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, user)
 }
+
+func CreateUser(c echo.Context) error {
+	user := User{}
+
+	if err := c.Bind(&user); err != nil {
+		return err
+	}
+
+	DB.Create(&user)
+	return c.JSON(http.StatusCreated, user)
+}
