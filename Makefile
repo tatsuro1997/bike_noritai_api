@@ -2,7 +2,8 @@ build:
 	docker-compose build
 
 up:
-	docker compose run --rm api
+	docker compose down
+	docker compose up
 
 stop:
 	docker-compose stop
