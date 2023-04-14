@@ -361,6 +361,19 @@ components:
                 type: string
               password:
                 type: string
+              name:
+                type: string
+              area:
+                type: string
+              prefecture:
+                type: string
+              url:
+                type: string
+              bike_name:
+                type: string
+              experience:
+                type: integer
+                format: int8
     Spot:
       content:
         application/json:
@@ -498,7 +511,7 @@ components:
         bike_name:
           type: string
         experience:
-          type: string
+          type: integer
         created_at:
           type: string
           format: date-time
