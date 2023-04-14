@@ -52,3 +52,26 @@ func CreateUser(c echo.Context) error {
 	DB.Create(&user)
 	return c.JSON(http.StatusCreated, user)
 }
+
+func UpdateUser(c echo.Context) error {
+	user := new(User)
+
+	userID := c.Param("user_id")
+	if userID == "" {
+		return c.JSON(http.StatusBadRequest, "user ID is required")
+	}
+
+	if err := DB.First(&user, userID).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	if err := c.Bind(&user); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	if err := DB.Save(&user).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusCreated, user)
+}
