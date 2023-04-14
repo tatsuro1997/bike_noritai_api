@@ -10,6 +10,7 @@ import (
 func NewRouter() *echo.Echo {
 	e := echo.New()
 	e.Use(middleware.CORS())
+	e.Use(middleware.Logger())
 
 	e.GET("/api/users", handler.GetUsers)
 	e.GET("/api/users/:user_id", handler.GetUser)
