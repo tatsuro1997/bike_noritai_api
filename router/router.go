@@ -16,6 +16,7 @@ func NewRouter() *echo.Echo {
 	e.GET("/api/users/:user_id", handler.GetUser)
 	e.POST("/api/users", handler.CreateUser)
 	e.PATCH("/api/users/:user_id", handler.UpdateUser)
+	e.DELETE("/api/users/:user_id", handler.DeleteUser)
 
 	return e
 }

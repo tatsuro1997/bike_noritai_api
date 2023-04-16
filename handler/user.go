@@ -75,3 +75,18 @@ func UpdateUser(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, user)
 }
+
+func DeleteUser(c echo.Context) error {
+	user := new(User)
+
+	userID := c.Param("user_id")
+	if userID == "" {
+		return c.JSON(http.StatusBadRequest, "user ID is required")
+	}
+
+	if err := DB.Where("id = ?", userID).Delete(&user).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusNoContent, user)
+}

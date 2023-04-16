@@ -14,5 +14,5 @@ type User struct {
 	Experience int8      `json:"experience"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
-	Spots      []Spot    `json:"posts" gorm:"foreignKey:UserID" param:"user_id"`
+	Spots      []Spot    `json:"posts" gorm:"foreignKey:UserID;constraint:OnDelete:SET NULL" param:"user_id"`
 }
