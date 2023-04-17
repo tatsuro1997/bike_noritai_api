@@ -43,6 +43,17 @@ func GetSpot(c echo.Context) error {
 	return c.JSON(http.StatusOK, spot)
 }
 
+func CreateSpot(c echo.Context) error {
+	spot := Spot{}
+
+	if err := c.Bind(&spot); err != nil {
+		return err
+	}
+
+	DB.Create(&spot)
+	return c.JSON(http.StatusCreated, spot)
+}
+
 func UpdateSpot(c echo.Context) error {
 	spot := new(Spot)
 
