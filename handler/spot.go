@@ -85,3 +85,31 @@ func UpdateSpot(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, spot)
 }
+
+func DeleteSpot(c echo.Context) error {
+	spot := new(Spot)
+
+	userID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if userID == 0 {
+		return c.JSON(http.StatusBadRequest, "user ID is required")
+	}
+
+	spotID := c.Param("spot_id")
+	if spotID == "" {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
+	}
+
+	if err := DB.First(&spot, spotID).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	if spot.UserID != userID {
+		return c.JSON(http.StatusBadRequest, "user and spot do not match")
+	}
+
+	if err := DB.Where("id = ?", spotID).Delete(&spot).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusNoContent, spot)
+}
