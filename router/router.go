@@ -19,6 +19,7 @@ func NewRouter() *echo.Echo {
 	e.DELETE("/api/users/:user_id", handler.DeleteUser)
 
 	e.GET("/api/spots", handler.GetSpots)
+	e.GET("/api/spots/:spot_id", handler.GetSpot)
 
 	return e
 }
