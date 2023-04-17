@@ -401,7 +401,7 @@ components:
               off_day:
                 type: string
               parking:
-                type: string
+                type: boolean
               description:
                 type: string
               lat:

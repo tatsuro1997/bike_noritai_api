@@ -13,7 +13,7 @@ type Spot struct {
 	OpenTime    string    `json:"open_time"`
 	OffDay      string    `json:"off_day"`
 	Parking     bool      `json:"parking"`
-	Description string    `json:"string"`
+	Description string    `json:"description"`
 	Lat         float32   `json:"lat"`
 	Lng         float32   `json:"lng"`
 	CreatedAt   time.Time `json:"created_at"`
