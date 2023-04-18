@@ -43,6 +43,24 @@ func GetSpot(c echo.Context) error {
 	return c.JSON(http.StatusOK, spot)
 }
 
+func GetUserSpot(c echo.Context) error {
+	spots := []Spot{}
+
+	userID := c.Param("user_id")
+	if userID == "" {
+		return c.JSON(http.StatusBadRequest, "user ID is required")
+	}
+
+	if err := DB.Where("user_id = ?", userID).Find(&spots).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(http.StatusNotFound, "spot not found")
+		}
+		return err
+	}
+
+	return c.JSON(http.StatusOK, spots)
+}
+
 func CreateSpot(c echo.Context) error {
 	spot := Spot{}
 
