@@ -71,6 +71,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Spot"
+    post:
+      description: スポット登録
+      operationId: SpotCreate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Spot"
+      responses:
+        "201":
+          description: Created
 
   "/api/spots/{spot_id}":
     get:
@@ -101,21 +112,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Spot"
-    post:
-      description: スポット登録
-      operationId: SpotCreate
-      parameters:
-        [
-          $ref: "#/components/parameters/UserId",
-        ]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Spot"
-      responses:
-        "201":
-          description: Created
 
   "/api/users/{user_id}/spots/{spot_id}":
     patch:
@@ -401,7 +397,7 @@ components:
               off_day:
                 type: string
               parking:
-                type: string
+                type: boolean
               description:
                 type: string
               lat:
@@ -522,9 +518,6 @@ components:
     Spot:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
         user_id:
           type: integer
           format: int64
