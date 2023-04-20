@@ -16,6 +16,15 @@ make build
 make up
 ```
 
+## test
+```console
+# Enter database container
+make test_db
+
+# Execute test go
+make go_test
+```
+
 ## DB
 ```console
 # Enter database container
