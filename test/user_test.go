@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 
 	. "bike_noritai_api/handler"
+	. "bike_noritai_api/router"
 )
 
 func TestGetUsers(t *testing.T) {
@@ -34,5 +35,25 @@ func TestGetUsers(t *testing.T) {
 
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
+	}
+}
+
+func TestGetUser(t *testing.T) {
+	router := NewRouter()
+
+	req := httptest.NewRequest(http.MethodGet, "/api/users/1", nil)
+
+	res := httptest.NewRecorder()
+
+	router.ServeHTTP(res, req)
+
+	if res.Code != http.StatusOK {
+		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
+	}
+
+	expectedBody := `{"id":1,"name":"tester1","email":"tester1@bike_noritai_dev","password":"password","area":"東海","prefecture":"三重県","url":"http://test.com","bike_name":"CBR650R","experience":5,"posts":null}`
+
+	if strings.Contains(res.Body.String(), expectedBody) {
+		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
 	}
 }
