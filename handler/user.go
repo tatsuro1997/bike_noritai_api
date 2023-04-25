@@ -69,7 +69,7 @@ func UpdateUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	if err := DB.Save(&user).Error; err != nil {
+	if err := DB.Model(&user).Updates(&user).Error; err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 

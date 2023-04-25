@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -12,6 +13,7 @@ import (
 
 	. "bike_noritai_api/handler"
 	. "bike_noritai_api/model"
+	. "bike_noritai_api/repository"
 	. "bike_noritai_api/router"
 )
 
@@ -121,5 +123,85 @@ func TestCreateUser(t *testing.T) {
 	}
 	if resBody.Experience != user.Experience {
 		t.Errorf("expected user experience to be %v but got %v", user.Experience, resBody.Experience)
+	}
+}
+
+func TestUpdateUser(t *testing.T) {
+	e := echo.New()
+
+	user := User{
+		Name:       "John Doe",
+		Email:      "john.doe@example.com",
+		Password:   "password",
+		Area:       "関西",
+		Prefecture: "大阪",
+		Url:        "",
+		BikeName:   "Ninja650",
+		Experience: 10,
+	}
+	if err := DB.Create(&user).Error; err != nil {
+		t.Fatalf("failed to create test user: %v", err)
+	}
+
+	updatedUser := User{
+		ID:         user.ID,
+		Name:       "Jane Smith",
+		Email:      "jane.smith@example.com",
+		Password:   "update_password",
+		Area:       "九州",
+		Prefecture: "福岡",
+		Url:        "https://example.com",
+		BikeName:   "R6",
+		Experience: 16,
+	}
+	reqBody, err := json.Marshal(updatedUser)
+	if err != nil {
+		t.Fatalf("failed to marshal request body: %v", err)
+	}
+	req := httptest.NewRequest(http.MethodPut, "/api/users/"+strconv.Itoa(int(user.ID)), bytes.NewBuffer(reqBody))
+	req.Header.Set("Content-Type", "application/json")
+	res := httptest.NewRecorder()
+	c := e.NewContext(req, res)
+	c.SetParamNames("user_id")
+	c.SetParamValues(strconv.Itoa(int(user.ID)))
+
+	if err := UpdateUser(c); err != nil {
+		t.Fatalf("failed to update user: %v", err)
+	}
+
+	if res.Code != http.StatusCreated {
+		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
+	}
+
+	var resBody User
+	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+	if resBody.ID != user.ID {
+		t.Errorf("expected user ID to be %v but got %v", user.ID, resBody.ID)
+	}
+	if resBody.Name != updatedUser.Name {
+		t.Errorf("expected user name to be %v but got %v", updatedUser.Name, resBody.Name)
+	}
+	if resBody.Email != updatedUser.Email {
+		t.Errorf("expected user email to be %v but got %v", updatedUser.Email, resBody.Email)
+	}
+	if resBody.Password != updatedUser.Password {
+		t.Errorf("expected user password to be %v but got %v", updatedUser.Password, resBody.Password)
+	}
+	if resBody.Area != updatedUser.Area {
+		t.Errorf("expected user area to be %v but got %v", updatedUser.Area, resBody.Area)
+	}
+	if resBody.Prefecture != updatedUser.Prefecture {
+		t.Errorf("expected user prefecture to be %v but got %v", updatedUser.Prefecture, resBody.Prefecture)
+	}
+	if resBody.Url != updatedUser.Url {
+		t.Errorf("expected user url to be %v but got %v", updatedUser.Url, resBody.Url)
+	}
+	if resBody.BikeName != updatedUser.BikeName {
+		t.Errorf("expected user bike_name to be %v but got %v", updatedUser.BikeName, resBody.BikeName)
+	}
+	if resBody.Experience != updatedUser.Experience {
+		t.Errorf("expected user experience to be %v but got %v", updatedUser.Experience, resBody.Experience)
 	}
 }
