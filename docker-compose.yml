@@ -49,10 +49,11 @@ services:
       - "3307:3306"
     volumes:
       - type: volume
-        source: mysql_data
+        source: test_mysql_data
         target: /var/lib/mysql
 
 networks:
   default:
 volumes:
   mysql_data:
+  test_mysql_data:
