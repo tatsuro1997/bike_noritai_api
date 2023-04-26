@@ -3,7 +3,6 @@ package test
 import (
 	"bytes"
 	"encoding/json"
-
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -22,13 +21,9 @@ import (
 
 func TestGetUsers(t *testing.T) {
 	e := echo.New()
-
 	req := httptest.NewRequest(http.MethodGet, "/api/users", nil)
-
 	res := httptest.NewRecorder()
-
 	c := e.NewContext(req, res)
-
 	err := GetUsers(c)
 
 	if res.Code != http.StatusOK {
@@ -48,11 +43,8 @@ func TestGetUsers(t *testing.T) {
 
 func TestGetUser(t *testing.T) {
 	router := NewRouter()
-
 	req := httptest.NewRequest(http.MethodGet, "/api/users/1", nil)
-
 	res := httptest.NewRecorder()
-
 	router.ServeHTTP(res, req)
 
 	if res.Code != http.StatusOK {
