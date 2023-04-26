@@ -3,6 +3,8 @@ package test
 import (
 	"bytes"
 	"encoding/json"
+
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -10,6 +12,7 @@ import (
 	"testing"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 
 	. "bike_noritai_api/handler"
 	. "bike_noritai_api/model"
@@ -203,5 +206,22 @@ func TestUpdateUser(t *testing.T) {
 	}
 	if resBody.Experience != updatedUser.Experience {
 		t.Errorf("expected user experience to be %v but got %v", updatedUser.Experience, resBody.Experience)
+	}
+}
+
+func TestDeleteUser(t *testing.T) {
+	router := NewRouter()
+	req := httptest.NewRequest(http.MethodDelete, "/api/users/1", nil)
+	res := httptest.NewRecorder()
+	router.ServeHTTP(res, req)
+
+	if res.Code != http.StatusNoContent {
+		t.Errorf("expected status code %v, but got %v", http.StatusNoContent, res.Code)
+	}
+
+	var deletedUser User
+	err := DB.First(&deletedUser, "1").Error
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		t.Errorf("expected user record to be deleted, but found: %v", deletedUser)
 	}
 }
