@@ -2,8 +2,11 @@ package repository
 
 import (
 	"log"
+	"os"
 
 	. "bike_noritai_api/model"
+
+	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -14,7 +17,15 @@ var (
 )
 
 func init() {
-	dsn := "tester:password@tcp(db:3306)/bike_noritai_dev?charset=utf8mb4&parseTime=True&loc=Local"
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	dsn := os.Getenv("DEV_DB_DNS")
+	if os.Getenv("ENV") == "test" {
+		dsn = os.Getenv("TEST_DB_DNS")
+	}
 
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {

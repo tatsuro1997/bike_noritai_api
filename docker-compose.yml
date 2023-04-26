@@ -34,7 +34,26 @@ services:
     networks:
       - default
 
+  test_db:
+    container_name: test_db
+    build:
+      context: .
+      dockerfile: db.dockerfile
+    tty: true
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test_db
+      MYSQL_USER: tester
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - type: volume
+        source: test_mysql_data
+        target: /var/lib/mysql
+
 networks:
   default:
 volumes:
   mysql_data:
+  test_mysql_data:
