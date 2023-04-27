@@ -17,7 +17,7 @@ import (
 	. "bike_noritai_api/handler"
 	// . "bike_noritai_api/model"
 	// . "bike_noritai_api/repository"
-	// . "bike_noritai_api/router"
+	. "bike_noritai_api/router"
 )
 
 func TestGetSpots(t *testing.T) {
@@ -48,22 +48,22 @@ func TestGetSpots(t *testing.T) {
 	}
 }
 
-// func TestGetUser(t *testing.T) {
-// 	router := NewRouter()
-// 	req := httptest.NewRequest(http.MethodGet, "/api/users/1", nil)
-// 	res := httptest.NewRecorder()
-// 	router.ServeHTTP(res, req)
+func TestGetSpot(t *testing.T) {
+	router := NewRouter()
+	req := httptest.NewRequest(http.MethodGet, "/api/spots/1", nil)
+	res := httptest.NewRecorder()
+	router.ServeHTTP(res, req)
 
-// 	if res.Code != http.StatusOK {
-// 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
-// 	}
+	if res.Code != http.StatusOK {
+		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
+	}
 
-// 	expectedBody := `{"id":1,"name":"tester1","email":"tester1@bike_noritai_dev","password":"password","area":"東海","prefecture":"三重県","url":"http://test.com","bike_name":"CBR650R","experience":5,"posts":null}`
+	expectedBody := `"id":1,"user_id":1,"name":"豊受大神宮 (伊勢神宮 外宮）","image":"http://test.com","type":"観光","address":"三重県伊勢市豊川町２７９","hp_url":"https://www.isejingu.or.jp/about/geku/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"外宮から行くのが良いみたいですよ。","lat":34.487865,"lng":136.70374`
 
-// 	if strings.Contains(res.Body.String(), expectedBody) {
-// 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
-// 	}
-// }
+	if !strings.Contains(res.Body.String(), expectedBody) {
+		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
+	}
+}
 
 // func TestCreateUser(t *testing.T) {
 // 	e := echo.New()
