@@ -1,8 +1,9 @@
 package test
 
 import (
-	// "bytes"
-	// "encoding/json"
+	"bytes"
+	"encoding/json"
+
 	// "errors"
 	"net/http"
 	"net/http/httptest"
@@ -15,7 +16,8 @@ import (
 	// "gorm.io/gorm"
 
 	. "bike_noritai_api/handler"
-	// . "bike_noritai_api/model"
+	. "bike_noritai_api/model"
+
 	// . "bike_noritai_api/repository"
 	. "bike_noritai_api/router"
 )
@@ -31,9 +33,9 @@ func TestGetSpots(t *testing.T) {
 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
 	}
 
-		expectedBody := `"id":1,"user_id":1,"name":"豊受大神宮 (伊勢神宮 外宮）","image":"http://test.com","type":"観光","address":"三重県伊勢市豊川町２７９","hp_url":"https://www.isejingu.or.jp/about/geku/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"外宮から行くのが良いみたいですよ。","lat":34.4879,"lng":136.704`
+	expectedBody := `"id":1,"user_id":1,"name":"豊受大神宮 (伊勢神宮 外宮）","image":"http://test.com","type":"観光","address":"三重県伊勢市豊川町２７９","hp_url":"https://www.isejingu.or.jp/about/geku/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"外宮から行くのが良いみたいですよ。","lat":34.4879,"lng":136.704`
 
-		expectedBody2 := `"id":2,"user_id":1,"name":"伊勢神宮（内宮）","image":"http://test.com","type":"観光","address":"三重県伊勢市宇治館町１","hp_url":"https://www.isejingu.or.jp/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"日本最大の由緒正しき神社です。","lat":34.4562,"lng":136.726`
+	expectedBody2 := `"id":2,"user_id":1,"name":"伊勢神宮（内宮）","image":"http://test.com","type":"観光","address":"三重県伊勢市宇治館町１","hp_url":"https://www.isejingu.or.jp/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"日本最大の由緒正しき神社です。","lat":34.4562,"lng":136.726`
 
 	if !strings.Contains(res.Body.String(), expectedBody) {
 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
@@ -65,68 +67,84 @@ func TestGetSpot(t *testing.T) {
 	}
 }
 
-// func TestCreateUser(t *testing.T) {
-// 	e := echo.New()
+func TestCreateSpot(t *testing.T) {
+	e := echo.New()
 
-// 	user := User{
-// 		Name:       "tester3",
-// 		Email:      "tester3@bike_noritai_dev.com",
-// 		Password:   "password",
-// 		Area:       "関西",
-// 		Prefecture: "大阪",
-// 		Url:        "",
-// 		BikeName:   "Ninja650",
-// 		Experience: 10,
-// 	}
-// 	reqBody, err := json.Marshal(user)
-// 	if err != nil {
-// 		t.Fatalf("failed to marshal request body: %v", err)
-// 	}
-// 	req := httptest.NewRequest(http.MethodPost, "/api/users", bytes.NewBuffer(reqBody))
-// 	req.Header.Set("Content-Type", "application/json")
-// 	res := httptest.NewRecorder()
-// 	c := e.NewContext(req, res)
+	spot := Spot{
+		UserID:      1,
+		Name:        "東京スカイツリー",
+		Image:       "http://test.com",
+		Type:        "観光",
+		Address:     "〒131-0045 東京都墨田区押上１丁目１−２",
+		HpURL:       "https://www.tokyo-skytree.jp/",
+		OpenTime:    "10:00~21:00",
+		OffDay:      "",
+		Parking:     true,
+		Description: "大林建設が施工した日本最高峰の電波塔です。",
+		Lat:         35.71021159216932,
+		Lng:         139.81076575474597,
+	}
+	reqBody, err := json.Marshal(spot)
+	if err != nil {
+		t.Fatalf("failed to marshal request body: %v", err)
+	}
+	req := httptest.NewRequest(http.MethodPost, "/api/users/1/spots", bytes.NewBuffer(reqBody))
+	req.Header.Set("Content-Type", "application/json")
+	res := httptest.NewRecorder()
+	c := e.NewContext(req, res)
 
-// 	if err := CreateUser(c); err != nil {
-// 		t.Fatalf("failed to create user: %v", err)
-// 	}
+	if err := CreateSpot(c); err != nil {
+		t.Fatalf("failed to create user: %v", err)
+	}
 
-// 	if res.Code != http.StatusCreated {
-// 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
-// 	}
+	if res.Code != http.StatusCreated {
+		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
+	}
 
-// 	var resBody User
-// 	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
-// 		t.Fatalf("failed to unmarshal response body: %v", err)
-// 	}
-// 	if resBody.ID == 0 {
-// 		t.Errorf("expected user ID to be non-zero but got %v", resBody.ID)
-// 	}
-// 	if resBody.Name != user.Name {
-// 		t.Errorf("expected user name to be %v but got %v", user.Name, resBody.Name)
-// 	}
-// 	if resBody.Email != user.Email {
-// 		t.Errorf("expected user email to be %v but got %v", user.Email, resBody.Email)
-// 	}
-// 	if resBody.Password != user.Password {
-// 		t.Errorf("expected user password to be %v but got %v", user.Password, resBody.Password)
-// 	}
-// 	if resBody.Area != user.Area {
-// 		t.Errorf("expected user area to be %v but got %v", user.Area, resBody.Area)
-// 	}
-// 	if resBody.Prefecture != user.Prefecture {
-// 		t.Errorf("expected user prefecture to be %v but got %v", user.Prefecture, resBody.Prefecture)
-// 	}
-// 	if resBody.Url != user.Url {
-// 		t.Errorf("expected user url to be %v but got %v", user.Url, resBody.Url)
-// 	}
-// 	if resBody.BikeName != user.BikeName {
-// 		t.Errorf("expected user bike name to be %v but got %v", user.BikeName, resBody.BikeName)
-// 	}
-// 	if resBody.Experience != user.Experience {
-// 		t.Errorf("expected user experience to be %v but got %v", user.Experience, resBody.Experience)
-// 	}
-// }
+	var resBody Spot
+	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+	if resBody.ID == 0 {
+		t.Errorf("expected spot ID to be non-zero but got %v", resBody.ID)
+	}
+	if resBody.UserID != spot.UserID {
+		t.Errorf("expected spot user id to be %v but got %v", spot.UserID, resBody.UserID)
+	}
+	if resBody.Name != spot.Name {
+		t.Errorf("expected spot name to be %v but got %v", spot.Name, resBody.Name)
+	}
+	if resBody.Image != spot.Image {
+		t.Errorf("expected spot image to be %v but got %v", spot.Image, resBody.Image)
+	}
+	if resBody.Type != spot.Type {
+		t.Errorf("expected spot type to be %v but got %v", spot.Type, resBody.Type)
+	}
+	if resBody.Address != spot.Address {
+		t.Errorf("expected spot address to be %v but got %v", spot.Address, resBody.Address)
+	}
+	if resBody.HpURL != spot.HpURL {
+		t.Errorf("expected spot HP URL to be %v but got %v", spot.HpURL, resBody.HpURL)
+	}
+	if resBody.OpenTime != spot.OpenTime {
+		t.Errorf("expected spot open time to be %v but got %v", spot.OpenTime, resBody.OpenTime)
+	}
+	if resBody.OffDay != spot.OffDay {
+		t.Errorf("expected spot off day to be %v but got %v", spot.OffDay, resBody.OffDay)
+	}
+	if resBody.Parking != spot.Parking {
+		t.Errorf("expected spot parking to be %v but got %v", spot.Parking, resBody.Parking)
+	}
+	if resBody.Description != spot.Description {
+		t.Errorf("expected spot description to be %v but got %v", spot.Description, resBody.Description)
+	}
+	if resBody.Lat != spot.Lat {
+		t.Errorf("expected spot lat to be %v but got %v", spot.Lat, resBody.Lat)
+	}
+	if resBody.Lng != spot.Lng {
+		t.Errorf("expected spot lng to be %v but got %v", spot.Lng, resBody.Lng)
+	}
+}
 
 // func TestUpdateUser(t *testing.T) {
 // 	e := echo.New()
