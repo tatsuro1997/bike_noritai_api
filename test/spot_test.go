@@ -18,7 +18,7 @@ import (
 	. "bike_noritai_api/handler"
 	. "bike_noritai_api/model"
 
-	// . "bike_noritai_api/repository"
+	. "bike_noritai_api/repository"
 	. "bike_noritai_api/router"
 )
 
@@ -61,6 +61,40 @@ func TestGetSpot(t *testing.T) {
 	}
 
 	expectedBody := `"id":1,"user_id":1,"name":"豊受大神宮 (伊勢神宮 外宮）","image":"http://test.com","type":"観光","address":"三重県伊勢市豊川町２７９","hp_url":"https://www.isejingu.or.jp/about/geku/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"外宮から行くのが良いみたいですよ。","lat":34.487865,"lng":136.70374`
+
+	if !strings.Contains(res.Body.String(), expectedBody) {
+		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
+	}
+}
+
+func TestGetUserSpot(t *testing.T) {
+	spot := Spot{
+		UserID:      2,
+		Name:        "東京スカイツリー",
+		Image:       "http://test.com",
+		Type:        "観光",
+		Address:     "〒131-0045 東京都墨田区押上１丁目１−２",
+		HpURL:       "https://www.tokyo-skytree.jp/",
+		OpenTime:    "10:00~21:00",
+		OffDay:      "",
+		Parking:     true,
+		Description: "大林建設が施工した日本最高峰の電波塔です。",
+		Lat:         35.71021159216932,
+		Lng:         139.81076575474597,
+	}
+	if err := DB.Create(&spot).Error; err != nil {
+		t.Fatalf("failed to create test user: %v", err)
+	}
+	router := NewRouter()
+	req := httptest.NewRequest(http.MethodGet, "/api/users/2/spots", nil)
+	res := httptest.NewRecorder()
+	router.ServeHTTP(res, req)
+
+	if res.Code != http.StatusOK {
+		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
+	}
+
+	expectedBody := `"id":3,"user_id":2,"name":"東京スカイツリー","image":"http://test.com","type":"観光","address":"〒131-0045 東京都墨田区押上１丁目１−２","hp_url":"https://www.tokyo-skytree.jp/","open_time":"10:00~21:00","off_day":"","parking":true,"description":"大林建設が施工した日本最高峰の電波塔です。","lat":35.710213,"lng":139.81076`
 
 	if !strings.Contains(res.Body.String(), expectedBody) {
 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
