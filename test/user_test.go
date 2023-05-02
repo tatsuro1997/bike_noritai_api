@@ -30,10 +30,16 @@ func TestGetUsers(t *testing.T) {
 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
 	}
 
-	expectedBody := `[{"id":1,"name":"tester1","email":"tester1@bike_noritai_dev","password":"password","area":"東海","prefecture":"三重県","url":"http://test.com","bike_name":"CBR650R","experience":5,"posts":null},{"id":2,"name":"tester2","email":"tester2@bike_noritai_dev","password":"password","area":"関東","prefecture":"東京都","url":"http://test.com","bike_name":"CBR1000RR","experience":10,"posts":null}]`
+	expectedBody := `"id":1,"name":"tester1","email":"tester1@bike_noritai_dev","password":"password","area":"東海","prefecture":"三重県","url":"http://test.com","bike_name":"CBR650R","experience":5`
 
-	if strings.Contains(res.Body.String(), expectedBody) {
+	expectedBody2 := `"id":2,"name":"tester2","email":"tester2@bike_noritai_dev","password":"password","area":"関東","prefecture":"東京都","url":"http://test.com","bike_name":"CBR1000RR","experience":10`
+
+	if !strings.Contains(res.Body.String(), expectedBody) {
 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
+	}
+
+	if !strings.Contains(res.Body.String(), expectedBody2) {
+		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody2)
 	}
 
 	if err != nil {
@@ -51,9 +57,9 @@ func TestGetUser(t *testing.T) {
 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
 	}
 
-	expectedBody := `{"id":1,"name":"tester1","email":"tester1@bike_noritai_dev","password":"password","area":"東海","prefecture":"三重県","url":"http://test.com","bike_name":"CBR650R","experience":5,"posts":null}`
+	expectedBody := `"id":1,"name":"tester1","email":"tester1@bike_noritai_dev","password":"password","area":"東海","prefecture":"三重県","url":"http://test.com","bike_name":"CBR650R","experience":5`
 
-	if strings.Contains(res.Body.String(), expectedBody) {
+	if !strings.Contains(res.Body.String(), expectedBody) {
 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
 	}
 }
