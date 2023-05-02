@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -97,7 +98,8 @@ func UpdateSpot(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	if err := DB.Save(&spot).Error; err != nil {
+	if err := DB.Model(&spot).Where("id=?", spot.ID).Updates(&spot).Error; err != nil {
+		log.Printf("Error updating", err.Error())
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
