@@ -34,9 +34,11 @@ func init() {
 
 	DB.Migrator().DropTable(&User{})
 	DB.Migrator().DropTable(&Spot{})
+	DB.Migrator().DropTable(&Comment{})
 
 	DB.AutoMigrate(&User{})
 	DB.AutoMigrate(&Spot{})
+	DB.AutoMigrate(&Comment{})
 
 	users := []User{
 		{
@@ -93,4 +95,32 @@ func init() {
 		},
 	}
 	DB.Create(&spots)
+
+	comments := []Comment{
+		{
+			UserID:   users[0].ID,
+			SpotID:   spots[1].ID,
+			UserName: users[0].Name,
+			Text:     "AAAAAAAAAAAAAAA",
+		},
+		{
+			UserID:   users[0].ID,
+			SpotID:   spots[1].ID,
+			UserName: users[0].Name,
+			Text:     "BBBBBBBBBBBBBBBBB",
+		},
+		{
+			UserID:   users[1].ID,
+			SpotID:   spots[0].ID,
+			UserName: users[0].Name,
+			Text:     "CCCCCCCCCCCCCCCCC",
+		},
+		{
+			UserID:   users[1].ID,
+			SpotID:   spots[1].ID,
+			UserName: users[0].Name,
+			Text:     "DDDDDDDDDDDDDDDDDD",
+		},
+	}
+	DB.Create(&comments)
 }
