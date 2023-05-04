@@ -1,19 +1,22 @@
 package test
 
 import (
-	// "bytes"
-	// "encoding/json"
+	"bytes"
+	"encoding/json"
+	"strconv"
+
 	// "errors"
 	// "github.com/labstack/echo/v4"
 	// "gorm.io/gorm"
 	"net/http"
 	"net/http/httptest"
+
 	// "strconv"
 	"strings"
 	"testing"
 
 	// . "bike_noritai_api/handler"
-	// . "bike_noritai_api/model"
+	. "bike_noritai_api/model"
 	// . "bike_noritai_api/repository"
 	. "bike_noritai_api/router"
 )
@@ -64,118 +67,51 @@ func TestGetRecordComments(t *testing.T) {
 	}
 }
 
-// func TestGetRecordComments(t *testing.T) {
-	// spot := Spot{
-	// 	UserID:      2,
-	// 	Name:        "東京スカイツリー",
-	// 	Image:       "http://test.com",
-	// 	Type:        "観光",
-	// 	Address:     "〒131-0045 東京都墨田区押上１丁目１−２",
-	// 	HpURL:       "https://www.tokyo-skytree.jp/",
-	// 	OpenTime:    "10:00~21:00",
-	// 	OffDay:      "",
-	// 	Parking:     true,
-	// 	Description: "大林建設が施工した日本最高峰の電波塔です。",
-	// 	Lat:         35.71021159216932,
-	// 	Lng:         139.81076575474597,
-	// }
-	// if err := DB.Create(&spot).Error; err != nil {
-	// 	t.Fatalf("failed to create test user: %v", err)
-	// }
-// 	router := NewRouter()
-// 	req := httptest.NewRequest(http.MethodGet, "/api/records/2/comments", nil)
-// 	res := httptest.NewRecorder()
-// 	router.ServeHTTP(res, req)
+func TestCreateComment(t *testing.T) {
+	router := NewRouter()
 
-// 	if res.Code != http.StatusOK {
-// 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
-// 	}
+	comment := Comment{
+		UserName: "Tester",
+		Text:     "EEEEEEEEEEEEEEEEEEEE",
+	}
 
-// 	expectedBody := `"id":3,"user_id":2,"name":"東京スカイツリー","image":"http://test.com","type":"観光","address":"〒131-0045 東京都墨田区押上１丁目１−２","hp_url":"https://www.tokyo-skytree.jp/","open_time":"10:00~21:00","off_day":"","parking":true,"description":"大林建設が施工した日本最高峰の電波塔です。","lat":35.710213,"lng":139.81076`
+	reqBody, err := json.Marshal(comment)
+	if err != nil {
+		t.Fatalf("failed to marshal request body: %v", err)
+	}
 
-// 	if !strings.Contains(res.Body.String(), expectedBody) {
-// 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
-// 	}
-// }
+	var userID int64 = 1
+	var recordID int64 = 1
 
-// func TestCreateSpot(t *testing.T) {
-// 	e := echo.New()
+	req := httptest.NewRequest(http.MethodPost, "/api/users/"+strconv.Itoa(int(userID))+"/records/"+strconv.Itoa(int(recordID))+"/comments", bytes.NewBuffer(reqBody))
+	req.Header.Set("Content-Type", "application/json")
+	res := httptest.NewRecorder()
+	router.ServeHTTP(res, req)
 
-// 	spot := Spot{
-// 		UserID:      1,
-// 		Name:        "東京スカイツリー",
-// 		Image:       "http://test.com",
-// 		Type:        "観光",
-// 		Address:     "〒131-0045 東京都墨田区押上１丁目１−２",
-// 		HpURL:       "https://www.tokyo-skytree.jp/",
-// 		OpenTime:    "10:00~21:00",
-// 		OffDay:      "",
-// 		Parking:     true,
-// 		Description: "大林建設が施工した日本最高峰の電波塔です。",
-// 		Lat:         35.71021159216932,
-// 		Lng:         139.81076575474597,
-// 	}
-// 	reqBody, err := json.Marshal(spot)
-// 	if err != nil {
-// 		t.Fatalf("failed to marshal request body: %v", err)
-// 	}
-// 	req := httptest.NewRequest(http.MethodPost, "/api/users/1/spots", bytes.NewBuffer(reqBody))
-// 	req.Header.Set("Content-Type", "application/json")
-// 	res := httptest.NewRecorder()
-// 	c := e.NewContext(req, res)
+	if res.Code != http.StatusCreated {
+		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
+	}
 
-// 	if err := CreateSpot(c); err != nil {
-// 		t.Fatalf("failed to create user: %v", err)
-// 	}
-
-// 	if res.Code != http.StatusCreated {
-// 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
-// 	}
-
-// 	var resBody Spot
-// 	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
-// 		t.Fatalf("failed to unmarshal response body: %v", err)
-// 	}
-// 	if resBody.ID == 0 {
-// 		t.Errorf("expected spot ID to be non-zero but got %v", resBody.ID)
-// 	}
-// 	if resBody.UserID != spot.UserID {
-// 		t.Errorf("expected spot user id to be %v but got %v", spot.UserID, resBody.UserID)
-// 	}
-// 	if resBody.Name != spot.Name {
-// 		t.Errorf("expected spot name to be %v but got %v", spot.Name, resBody.Name)
-// 	}
-// 	if resBody.Image != spot.Image {
-// 		t.Errorf("expected spot image to be %v but got %v", spot.Image, resBody.Image)
-// 	}
-// 	if resBody.Type != spot.Type {
-// 		t.Errorf("expected spot type to be %v but got %v", spot.Type, resBody.Type)
-// 	}
-// 	if resBody.Address != spot.Address {
-// 		t.Errorf("expected spot address to be %v but got %v", spot.Address, resBody.Address)
-// 	}
-// 	if resBody.HpURL != spot.HpURL {
-// 		t.Errorf("expected spot HP URL to be %v but got %v", spot.HpURL, resBody.HpURL)
-// 	}
-// 	if resBody.OpenTime != spot.OpenTime {
-// 		t.Errorf("expected spot open time to be %v but got %v", spot.OpenTime, resBody.OpenTime)
-// 	}
-// 	if resBody.OffDay != spot.OffDay {
-// 		t.Errorf("expected spot off day to be %v but got %v", spot.OffDay, resBody.OffDay)
-// 	}
-// 	if resBody.Parking != spot.Parking {
-// 		t.Errorf("expected spot parking to be %v but got %v", spot.Parking, resBody.Parking)
-// 	}
-// 	if resBody.Description != spot.Description {
-// 		t.Errorf("expected spot description to be %v but got %v", spot.Description, resBody.Description)
-// 	}
-// 	if resBody.Lat != spot.Lat {
-// 		t.Errorf("expected spot lat to be %v but got %v", spot.Lat, resBody.Lat)
-// 	}
-// 	if resBody.Lng != spot.Lng {
-// 		t.Errorf("expected spot lng to be %v but got %v", spot.Lng, resBody.Lng)
-// 	}
-// }
+	var resBody Comment
+	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+	if resBody.ID == 0 {
+		t.Errorf("expected spot ID to be non-zero but got %v", resBody.ID)
+	}
+	if resBody.UserID != userID {
+		t.Errorf("expected comment user id to be %v but got %v", userID, resBody.UserID)
+	}
+	if resBody.UserID != recordID {
+		t.Errorf("expected comment record id to be %v but got %v", recordID, resBody.UserID)
+	}
+	if resBody.UserName != comment.UserName {
+		t.Errorf("expected comment user name to be %v but got %v", comment.UserName, resBody.UserName)
+	}
+	if resBody.Text != comment.Text {
+		t.Errorf("expected comment text to be %v but got %v", comment.Text, resBody.Text)
+	}
+}
 
 // func TestUpdateSpot(t *testing.T) {
 // 	spot := Spot{
