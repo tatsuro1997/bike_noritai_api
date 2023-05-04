@@ -299,7 +299,8 @@ paths:
       parameters:
         [
           $ref: "#/components/parameters/UserId",
-          $ref: "#/components/parameters/RecordId"
+          $ref: "#/components/parameters/RecordId",
+          $ref: "#/components/parameters/CommentId"
         ]
       responses:
         "204":
