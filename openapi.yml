@@ -278,13 +278,15 @@ paths:
       responses:
         "201":
           description: Created
+  "/api/users/{user_id}/records/{record_id}/comments/{comment_id}":
     patch:
       description: コメント更新
       operationId: CommentUpdate
       parameters:
         [
           $ref: "#/components/parameters/UserId",
-          $ref: "#/components/parameters/RecordId"
+          $ref: "#/components/parameters/RecordId",
+          $ref: "#/components/parameters/CommentId"
         ]
       requestBody:
         $ref: "#/components/requestBodies/Comment"
@@ -343,6 +345,13 @@ components:
       schema:
         type: integer
       description: レコードID
+    CommentId:
+      name: comment_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: コメントID
 
   requestBodies:
     User:
