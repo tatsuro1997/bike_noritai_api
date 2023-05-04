@@ -3,7 +3,7 @@ package handler
 import (
 	"errors"
 	"net/http"
-	// "strconv"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -33,12 +33,12 @@ func GetUserComments(c echo.Context) error {
 func GetRecordComments(c echo.Context) error {
 	comments := []Comment{}
 
-	RecordID := c.Param("record_id")
-	if RecordID == "" {
+	recordID := c.Param("record_id")
+	if recordID == "" {
 		return c.JSON(http.StatusBadRequest, "record ID is required")
 	}
 
-	if err := DB.Where("record_id = ?", RecordID).Find(&comments).Error; err != nil {
+	if err := DB.Where("record_id = ?", recordID).Find(&comments).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.JSON(http.StatusNotFound, "comments not found")
 		}
@@ -48,52 +48,29 @@ func GetRecordComments(c echo.Context) error {
 	return c.JSON(http.StatusOK, comments)
 }
 
-// func GetSpot(c echo.Context) error {
-// 	spot := Spot{}
+func CreateComment(c echo.Context) error {
+	comment := Comment{}
 
-// 	spotID := c.Param("spot_id")
-// 	if spotID == "" {
-// 		return c.JSON(http.StatusBadRequest, "spot ID is required")
-// 	}
+	if err := c.Bind(&comment); err != nil {
+		return err
+	}
 
-// 	if err := DB.First(&spot, spotID).Error; err != nil {
-// 		if errors.Is(err, gorm.ErrRecordNotFound) {
-// 			return c.JSON(http.StatusNotFound, "spot not found")
-// 		}
-// 		return err
-// 	}
+	userID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if userID == 0 {
+		return c.JSON(http.StatusBadRequest, "user ID is required")
+	}
 
-// 	return c.JSON(http.StatusOK, spot)
-// }
+	recordID, _ := strconv.ParseInt(c.Param("record_id"), 10, 64)
+	if recordID == 0 {
+		return c.JSON(http.StatusBadRequest, "record ID is required")
+	}
 
-// func GetUserSpot(c echo.Context) error {
-// 	spots := []Spot{}
+	comment.UserID = userID
+	comment.RecordID = recordID
 
-// 	userID := c.Param("user_id")
-// 	if userID == "" {
-// 		return c.JSON(http.StatusBadRequest, "user ID is required")
-// 	}
-
-// 	if err := DB.Where("user_id = ?", userID).Find(&spots).Error; err != nil {
-// 		if errors.Is(err, gorm.ErrRecordNotFound) {
-// 			return c.JSON(http.StatusNotFound, "spot not found")
-// 		}
-// 		return err
-// 	}
-
-// 	return c.JSON(http.StatusOK, spots)
-// }
-
-// func CreateSpot(c echo.Context) error {
-// 	spot := Spot{}
-
-// 	if err := c.Bind(&spot); err != nil {
-// 		return err
-// 	}
-
-// 	DB.Create(&spot)
-// 	return c.JSON(http.StatusCreated, spot)
-// }
+	DB.Create(&comment)
+	return c.JSON(http.StatusCreated, comment)
+}
 
 // func UpdateSpot(c echo.Context) error {
 // 	spot := new(Spot)

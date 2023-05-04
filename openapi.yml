@@ -457,15 +457,9 @@ components:
             type: object
             required:
               - "user_id"
-              - "spot_id"
+              - "record_id"
             properties:
-              user_id:
-                type: integer
-                format: int64
-              spot_id:
-                type: integer
-                format: int64
-              name:
+              user_name:
                 type: string
               text:
                 type: string
@@ -610,10 +604,10 @@ components:
         user_id:
           type: integer
           format: int64
-        spot_id:
+        record_id:
           type: integer
           format: int64
-        name:
+        user_name:
           type: string
         text:
           type: string
