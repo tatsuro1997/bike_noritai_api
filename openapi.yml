@@ -248,13 +248,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/Comment"
 
-  "/api/users/{user_id}/records/{record_id}/comments":
+  "/api/records/{record_id}/comments":
     get:
-      description: コメント一覧
+      description: スポットコメント一覧
       operationId: UserCommentIndex
       parameters:
         [
-          $ref: "#/components/parameters/UserId",
           $ref: "#/components/parameters/RecordId"
         ]
       responses:
@@ -264,6 +263,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Comment"
+
+  "/api/users/{user_id}/records/{record_id}/comments":
     post:
       description: コメント作成
       operationId: CommentCreate
@@ -277,13 +278,15 @@ paths:
       responses:
         "201":
           description: Created
+  "/api/users/{user_id}/records/{record_id}/comments/{comment_id}":
     patch:
       description: コメント更新
       operationId: CommentUpdate
       parameters:
         [
           $ref: "#/components/parameters/UserId",
-          $ref: "#/components/parameters/RecordId"
+          $ref: "#/components/parameters/RecordId",
+          $ref: "#/components/parameters/CommentId"
         ]
       requestBody:
         $ref: "#/components/requestBodies/Comment"
@@ -296,7 +299,8 @@ paths:
       parameters:
         [
           $ref: "#/components/parameters/UserId",
-          $ref: "#/components/parameters/RecordId"
+          $ref: "#/components/parameters/RecordId",
+          $ref: "#/components/parameters/CommentId"
         ]
       responses:
         "204":
@@ -342,6 +346,13 @@ components:
       schema:
         type: integer
       description: レコードID
+    CommentId:
+      name: comment_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: コメントID
 
   requestBodies:
     User:
@@ -456,15 +467,9 @@ components:
             type: object
             required:
               - "user_id"
-              - "spot_id"
+              - "record_id"
             properties:
-              user_id:
-                type: integer
-                format: int64
-              spot_id:
-                type: integer
-                format: int64
-              name:
+              user_name:
                 type: string
               text:
                 type: string
@@ -609,10 +614,10 @@ components:
         user_id:
           type: integer
           format: int64
-        spot_id:
+        record_id:
           type: integer
           format: int64
-        name:
+        user_name:
           type: string
         text:
           type: string

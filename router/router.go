@@ -25,5 +25,11 @@ func NewRouter() *echo.Echo {
 	e.PATCH("/api/users/:user_id/spots/:spot_id", handler.UpdateSpot)
 	e.DELETE("/api/users/:user_id/spots/:spot_id", handler.DeleteSpot)
 
+	e.GET("/api/users/:user_id/comments", handler.GetUserComments)
+	e.GET("/api/records/:record_id/comments", handler.GetRecordComments)
+	e.POST("/api/users/:user_id/records/:record_id/comments", handler.CreateComment)
+	e.PATCH("/api/users/:user_id/records/:record_id/comments/:comment_id", handler.UpdateComment)
+	e.DELETE("/api/users/:user_id/records/:record_id/comments/:comment_id", handler.DeleteComment)
+
 	return e
 }
