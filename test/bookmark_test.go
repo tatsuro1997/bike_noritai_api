@@ -1,10 +1,9 @@
 package test
 
 import (
-	// "bytes"
 	"encoding/json"
-	// "errors"
-	// "gorm.io/gorm"
+	"errors"
+	"gorm.io/gorm"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -12,7 +11,7 @@ import (
 	"testing"
 
 	. "bike_noritai_api/model"
-	// . "bike_noritai_api/repository"
+	. "bike_noritai_api/repository"
 	. "bike_noritai_api/router"
 )
 
@@ -68,70 +67,19 @@ func TestCreateBookmark(t *testing.T) {
 	}
 }
 
-// func TestUpdateComment(t *testing.T) {
-// 	comment := Comment{
-// 		UserID:   1,
-// 		RecordID: 1,
-// 		UserName: "Tester",
-// 		Text:     "FFFFFFFFFFF",
-// 	}
-// 	if err := DB.Create(&comment).Error; err != nil {
-// 		t.Fatalf("failed to create test user: %v", err)
-// 	}
+func TestDeleteBookmark(t *testing.T) {
+	router := NewRouter()
+	req := httptest.NewRequest(http.MethodDelete, "/api/users/1/spots/1/bookmarks/1", nil)
+	res := httptest.NewRecorder()
+	router.ServeHTTP(res, req)
 
-// 	updatedComment := Comment{
-// 		ID:       comment.ID,
-// 		UserID:   1,
-// 		RecordID: 1,
-// 		UserName: "Update Tester",
-// 		Text:     "GGGGGGGGGGGG",
-// 	}
-// 	reqBody, err := json.Marshal(updatedComment)
-// 	if err != nil {
-// 		t.Fatalf("failed to marshal request body: %v", err)
-// 	}
+	if res.Code != http.StatusNoContent {
+		t.Errorf("expected status code %v, but got %v", http.StatusNoContent, res.Code)
+	}
 
-// 	router := NewRouter()
-// 	req := httptest.NewRequest(http.MethodPatch, "/api/users/"+strconv.Itoa(int(comment.UserID))+"/records/"+strconv.Itoa(int(comment.RecordID))+"/comments/"+strconv.Itoa(int(comment.ID)), bytes.NewBuffer(reqBody))
-// 	req.Header.Set("Content-Type", "application/json")
-// 	res := httptest.NewRecorder()
-// 	router.ServeHTTP(res, req)
-
-// 	if res.Code != http.StatusCreated {
-// 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
-// 	}
-
-// 	var resBody Comment
-// 	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
-// 		t.Fatalf("failed to unmarshal response body: %v", err)
-// 	}
-// 	if resBody.UserID != updatedComment.UserID {
-// 		t.Errorf("expected comment user id to be %v but got %v", updatedComment.UserID, resBody.UserID)
-// 	}
-// 	if resBody.UserID != updatedComment.RecordID {
-// 		t.Errorf("expected comment record id to be %v but got %v", updatedComment.RecordID, resBody.UserID)
-// 	}
-// 	if resBody.UserName != updatedComment.UserName {
-// 		t.Errorf("expected comment user name to be %v but got %v", updatedComment.UserName, resBody.UserName)
-// 	}
-// 	if resBody.Text != updatedComment.Text {
-// 		t.Errorf("expected comment text to be %v but got %v", updatedComment.Text, resBody.Text)
-// 	}
-// }
-
-// func TestDeleteComment(t *testing.T) {
-// 	router := NewRouter()
-// 	req := httptest.NewRequest(http.MethodDelete, "/api/users/1/records/1/comments/1", nil)
-// 	res := httptest.NewRecorder()
-// 	router.ServeHTTP(res, req)
-
-// 	if res.Code != http.StatusNoContent {
-// 		t.Errorf("expected status code %v, but got %v", http.StatusNoContent, res.Code)
-// 	}
-
-// 	var deletedComment *Comment
-// 	err := DB.First(&deletedComment, "1").Error
-// 	if !errors.Is(err, gorm.ErrRecordNotFound) {
-// 		t.Errorf("expected spot record to be deleted, but found: %v", deletedComment)
-// 	}
-// }
+	var deletedBookmark *Bookmark
+	err := DB.First(&deletedBookmark, "1").Error
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		t.Errorf("expected spot record to be deleted, but found: %v", deletedBookmark)
+	}
+}
