@@ -3,7 +3,7 @@ package handler
 import (
 	"errors"
 	"net/http"
-	// "strconv"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -30,47 +30,29 @@ func GetBookmarks(c echo.Context) error {
 	return c.JSON(http.StatusOK, bookmarks)
 }
 
-// func GetRecordComments(c echo.Context) error {
-// 	comments := []Comment{}
+func CreateBookmark(c echo.Context) error {
+	bookmark := Bookmark{}
 
-// 	recordID := c.Param("record_id")
-// 	if recordID == "" {
-// 		return c.JSON(http.StatusBadRequest, "record ID is required")
-// 	}
+	if err := c.Bind(&bookmark); err != nil {
+		return err
+	}
 
-// 	if err := DB.Where("record_id = ?", recordID).Find(&comments).Error; err != nil {
-// 		if errors.Is(err, gorm.ErrRecordNotFound) {
-// 			return c.JSON(http.StatusNotFound, "comments not found")
-// 		}
-// 		return err
-// 	}
+	userID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if userID == 0 {
+		return c.JSON(http.StatusBadRequest, "user ID is required")
+	}
 
-// 	return c.JSON(http.StatusOK, comments)
-// }
+	spotID, _ := strconv.ParseInt(c.Param("spot_id"), 10, 64)
+	if spotID == 0 {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
+	}
 
-// func CreateComment(c echo.Context) error {
-// 	comment := Comment{}
+	bookmark.UserID = userID
+	bookmark.SpotID = spotID
 
-// 	if err := c.Bind(&comment); err != nil {
-// 		return err
-// 	}
-
-// 	userID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
-// 	if userID == 0 {
-// 		return c.JSON(http.StatusBadRequest, "user ID is required")
-// 	}
-
-// 	recordID, _ := strconv.ParseInt(c.Param("record_id"), 10, 64)
-// 	if recordID == 0 {
-// 		return c.JSON(http.StatusBadRequest, "record ID is required")
-// 	}
-
-// 	comment.UserID = userID
-// 	comment.RecordID = recordID
-
-// 	DB.Create(&comment)
-// 	return c.JSON(http.StatusCreated, comment)
-// }
+	DB.Create(&bookmark)
+	return c.JSON(http.StatusCreated, bookmark)
+}
 
 // func UpdateComment(c echo.Context) error {
 // 	comment := new(Comment)
