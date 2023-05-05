@@ -97,8 +97,8 @@ func TestCreateComment(t *testing.T) {
 	if resBody.UserID != userID {
 		t.Errorf("expected comment user id to be %v but got %v", userID, resBody.UserID)
 	}
-	if resBody.UserID != recordID {
-		t.Errorf("expected comment record id to be %v but got %v", recordID, resBody.UserID)
+	if resBody.RecordID != recordID {
+		t.Errorf("expected comment record id to be %v but got %v", recordID, resBody.RecordID)
 	}
 	if resBody.UserName != comment.UserName {
 		t.Errorf("expected comment user name to be %v but got %v", comment.UserName, resBody.UserName)
