@@ -633,7 +633,7 @@ components:
         user_id:
           type: integer
           format: int64
-        bookmark_id:
+        spot_id:
           type: integer
           format: int64
         created_at:

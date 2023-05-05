@@ -35,10 +35,12 @@ func init() {
 	DB.Migrator().DropTable(&User{})
 	DB.Migrator().DropTable(&Spot{})
 	DB.Migrator().DropTable(&Comment{})
+	DB.Migrator().DropTable(&Bookmark{})
 
 	DB.AutoMigrate(&User{})
 	DB.AutoMigrate(&Spot{})
 	DB.AutoMigrate(&Comment{})
+	DB.AutoMigrate(&Bookmark{})
 
 	users := []User{
 		{
@@ -123,4 +125,24 @@ func init() {
 		},
 	}
 	DB.Create(&comments)
+
+	bookmarks := []Bookmark{
+		{
+			UserID: users[0].ID,
+			SpotID: spots[0].ID,
+		},
+		{
+			UserID: users[0].ID,
+			SpotID: spots[1].ID,
+		},
+		{
+			UserID: users[1].ID,
+			SpotID: spots[0].ID,
+		},
+		{
+			UserID: users[1].ID,
+			SpotID: spots[1].ID,
+		},
+	}
+	DB.Create(&bookmarks)
 }
