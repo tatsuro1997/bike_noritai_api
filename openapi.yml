@@ -306,14 +306,13 @@ paths:
         "204":
           description: No Content
 
-  "/api/users/{user_id}/spots/{spot_id}/bookmarks":
+  "/api/users/{user_id}/bookmarks":
     get:
-      description: スポットブックマーク
+      description: ブックマーク
       operationId: BookmarkIndex
       parameters:
         [
           $ref: "#/components/parameters/UserId",
-          $ref: "#/components/parameters/SpotId"
         ]
       responses:
         "200":
@@ -322,6 +321,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Bookmark"
+  "/api/users/{user_id}/spots/{spot_id}/bookmarks":
+    post:
+      description: ブックマーク作成
+      operationId: BookmarkCreate
+      parameters:
+        [
+          $ref: "#/components/parameters/UserId",
+          $ref: "#/components/parameters/SpotId"
+        ]
+      responses:
+        "201":
+          description: Created
+    delete:
+      description: ブックマーク削除
+      operationId: BookmarkDelete
+      parameters:
+        [
+          $ref: "#/components/parameters/UserId",
+          $ref: "#/components/parameters/SpotId",
+        ]
+      responses:
+        "204":
+          description: No Content
 
 components:
   parameters:
