@@ -333,6 +333,7 @@ paths:
       responses:
         "201":
           description: Created
+  "/api/users/{user_id}/spots/{spot_id}/bookmarks/{bookmark_id}":
     delete:
       description: ブックマーク削除
       operationId: BookmarkDelete
@@ -340,6 +341,7 @@ paths:
         [
           $ref: "#/components/parameters/UserId",
           $ref: "#/components/parameters/SpotId",
+          $ref: "#/components/parameters/BookmarkId",
         ]
       responses:
         "204":
@@ -375,6 +377,13 @@ components:
       schema:
         type: integer
       description: コメントID
+    BookmarkId:
+      name: bookmark_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: ブックマークID
 
   requestBodies:
     User:

@@ -33,6 +33,7 @@ func NewRouter() *echo.Echo {
 
 	e.GET("/api/users/:user_id/bookmarks", handler.GetBookmarks)
 	e.POST("/api/users/:user_id/spots/:spot_id/bookmarks", handler.CreateBookmark)
+	e.DELETE("/api/users/:user_id/spots/:spot_id/bookmarks/:bookmark_id", handler.DeleteBookmark)
 
 	return e
 }
