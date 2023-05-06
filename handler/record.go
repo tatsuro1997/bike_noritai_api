@@ -30,6 +30,24 @@ func GetUserRecords(c echo.Context) error {
 	return c.JSON(http.StatusOK, records)
 }
 
+func GetSpotRecords(c echo.Context) error {
+	records := []Record{}
+
+	spotID := c.Param("spot_id")
+	if spotID == "" {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
+	}
+
+	if err := DB.Where("spot_id = ?", spotID).Find(&records).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(http.StatusNotFound, "records not found")
+		}
+		return err
+	}
+
+	return c.JSON(http.StatusOK, records)
+}
+
 // func GetRecordComments(c echo.Context) error {
 // 	comments := []Comment{}
 
