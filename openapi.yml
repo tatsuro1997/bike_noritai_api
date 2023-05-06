@@ -469,11 +469,14 @@ components:
               weather:
                 type: string
               temperature:
-                type: string
+                type: number
+                format: float
               running_time:
-                type: string
+                type: number
+                format: float
               distance:
-                type: string
+                type: number
+                format: float
               description:
                 type: string
     RecordLike:
@@ -606,11 +609,14 @@ components:
         weather:
           type: string
         temperature:
-          type: string
+          type: number
+          format: float
         running_time:
-          type: string
+          type: number
+          format: float
         distance:
-          type: string
+          type: number
+          format: float
         description:
           type: string
         created_at:

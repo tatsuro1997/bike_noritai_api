@@ -3,6 +3,7 @@ package repository
 import (
 	"log"
 	"os"
+	"time"
 
 	. "bike_noritai_api/model"
 
@@ -34,11 +35,13 @@ func init() {
 
 	DB.Migrator().DropTable(&User{})
 	DB.Migrator().DropTable(&Spot{})
+	DB.Migrator().DropTable(&Record{})
 	DB.Migrator().DropTable(&Comment{})
 	DB.Migrator().DropTable(&Bookmark{})
 
 	DB.AutoMigrate(&User{})
 	DB.AutoMigrate(&Spot{})
+	DB.AutoMigrate(&Record{})
 	DB.AutoMigrate(&Comment{})
 	DB.AutoMigrate(&Bookmark{})
 
@@ -97,6 +100,50 @@ func init() {
 		},
 	}
 	DB.Create(&spots)
+
+	records := []Record{
+		{
+			UserID:      users[0].ID,
+			SpotID:      spots[0].ID,
+			Date:        time.Now().Format("2023-01-01"),
+			Weather:     "晴れ",
+			Temperature: 23.4,
+			RunningTime: 4,
+			Distance:    120.4,
+			Description: "最高のツーリング日和でした！",
+		},
+		{
+			UserID:      users[0].ID,
+			SpotID:      spots[1].ID,
+			Date:        time.Now().Format("2023-01-01"),
+			Weather:     "曇り",
+			Temperature: 26.1,
+			RunningTime: 7,
+			Distance:    184.1,
+			Description: "なんとか天気が持って良かったです！",
+		},
+		{
+			UserID:      users[1].ID,
+			SpotID:      spots[0].ID,
+			Date:        time.Now().Format("2023-01-01"),
+			Weather:     "雨",
+			Temperature: 13.4,
+			RunningTime: 2,
+			Distance:    50.6,
+			Description: "朝から雨で大変でした。",
+		},
+		{
+			UserID:      users[1].ID,
+			SpotID:      spots[1].ID,
+			Date:        time.Now().Format("2023-01-01"),
+			Weather:     "晴れ",
+			Temperature: 33.4,
+			RunningTime: 6,
+			Distance:    220.4,
+			Description: "バイク暑すぎます！！！",
+		},
+	}
+	DB.Create(&records)
 
 	comments := []Comment{
 		{
