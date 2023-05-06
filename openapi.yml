@@ -154,18 +154,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Record"
+  "/api/spots/{spot_id}/records":
+    get:
+      description: スポット毎ツーリング記録一覧取得
+      operationId: Spot/RecordIndex
+      parameters:
+        [
+          $ref: "#/components/parameters/SpotId",
+        ]
+      responses:
+        "200":
+          description: ツーリング記録データ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+  "/api/users/{user_id}/spots/{spot_id}/records":
     post:
       description: ツーリング記録登録
       operationId: RecordCreate
       parameters:
         [
           $ref: "#/components/parameters/UserId",
+          $ref: "#/components/parameters/SpotId",
         ]
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Spot"
+              $ref: "#/components/schemas/Record"
       responses:
         "201":
           description: Created
