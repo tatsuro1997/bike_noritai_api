@@ -48,23 +48,23 @@ func GetSpotRecords(c echo.Context) error {
 	return c.JSON(http.StatusOK, records)
 }
 
-// func GetRecordComments(c echo.Context) error {
-// 	comments := []Comment{}
+func GetRecord(c echo.Context) error {
+	record := []Record{}
 
-// 	recordID := c.Param("record_id")
-// 	if recordID == "" {
-// 		return c.JSON(http.StatusBadRequest, "record ID is required")
-// 	}
+	recordID := c.Param("record_id")
+	if recordID == "" {
+		return c.JSON(http.StatusBadRequest, "record ID is required")
+	}
 
-// 	if err := DB.Where("record_id = ?", recordID).Find(&comments).Error; err != nil {
-// 		if errors.Is(err, gorm.ErrRecordNotFound) {
-// 			return c.JSON(http.StatusNotFound, "comments not found")
-// 		}
-// 		return err
-// 	}
+	if err := DB.Where("id = ?", recordID).Find(&record).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(http.StatusNotFound, "record not found")
+		}
+		return err
+	}
 
-// 	return c.JSON(http.StatusOK, comments)
-// }
+	return c.JSON(http.StatusOK, record)
+}
 
 func CreateRecord(c echo.Context) error {
 	record := Record{}

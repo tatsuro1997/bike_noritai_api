@@ -184,13 +184,12 @@ paths:
         "201":
           description: Created
 
-  "/api/users/{user_id}/records/{record_id}":
+  "/api/records/{record_id}":
     get:
       description: ツーリング記録詳細
       operationId: RecordShow
       parameters:
         [
-          $ref: "#/components/parameters/UserId",
           $ref: "#/components/parameters/RecordId"
         ]
       responses:
