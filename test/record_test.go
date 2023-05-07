@@ -1,18 +1,18 @@
 package test
 
 import (
-	// "bytes"
-	// "encoding/json"
+	"bytes"
+	"encoding/json"
 	// "errors"
 	// "gorm.io/gorm"
 	"net/http"
 	"net/http/httptest"
-	// "strconv"
+	"strconv"
 	"strings"
 	"testing"
 
-	// . "bike_noritai_api/model"
-	// . "bike_noritai_api/repository"
+	. "bike_noritai_api/model"
+	. "bike_noritai_api/repository"
 	. "bike_noritai_api/router"
 )
 
@@ -62,125 +62,158 @@ func TestGetSpotRecords(t *testing.T) {
 	}
 }
 
-// func TestGetRecordComments(t *testing.T) {
-// 	router := NewRouter()
-// 	req := httptest.NewRequest(http.MethodGet, "/api/records/2/comments", nil)
-// 	res := httptest.NewRecorder()
-// 	router.ServeHTTP(res, req)
+func TestGetRecord(t *testing.T) {
+	router := NewRouter()
+	req := httptest.NewRequest(http.MethodGet, "/api/records/1", nil)
+	res := httptest.NewRecorder()
+	router.ServeHTTP(res, req)
 
-// 	if res.Code != http.StatusOK {
-// 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
-// 	}
+	if res.Code != http.StatusOK {
+		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
+	}
 
-// 	expectedBody := `"id":3,"user_id":2,"record_id":2,"user_name":"tester1","text":"CCCCCCCCCCCCCCCCC"`
+	expectedBody := `"id":1,"user_id":1,"spot_id":1,"date":"70710-05-05","weather":"晴れ","temperature":23.4,"running_time":4,"distance":120.4,"description":"最高のツーリング日和でした！"`
 
-// 	expectedBody2 := `"id":4,"user_id":2,"record_id":2,"user_name":"tester1","text":"DDDDDDDDDDDDDDDDDD"`
+	if !strings.Contains(res.Body.String(), expectedBody) {
+		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
+	}
+}
 
-// 	if !strings.Contains(res.Body.String(), expectedBody) {
-// 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
-// 	}
+func TestCreateRecord(t *testing.T) {
+	router := NewRouter()
 
-// 	if !strings.Contains(res.Body.String(), expectedBody2) {
-// 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody2)
-// 	}
-// }
+	record := Record{
+		Date:        "2023-01-01",
+		Weather:     "曇り",
+		Temperature: 23.4,
+		RunningTime: 4.5,
+		Distance:    201.6,
+		Description: "AAAAAAAAAAAAAA",
+	}
 
-// func TestCreateComment(t *testing.T) {
-// 	router := NewRouter()
+	reqBody, err := json.Marshal(record)
+	if err != nil {
+		t.Fatalf("failed to marshal request body: %v", err)
+	}
 
-// 	comment := Comment{
-// 		UserName: "Tester",
-// 		Text:     "EEEEEEEEEEEEEEEEEEEE",
-// 	}
+	var userID int64 = 1
+	var spotID int64 = 1
 
-// 	reqBody, err := json.Marshal(comment)
-// 	if err != nil {
-// 		t.Fatalf("failed to marshal request body: %v", err)
-// 	}
+	req := httptest.NewRequest(http.MethodPost, "/api/users/"+strconv.Itoa(int(userID))+"/spots/"+strconv.Itoa(int(spotID))+"/records", bytes.NewBuffer(reqBody))
+	req.Header.Set("Content-Type", "application/json")
+	res := httptest.NewRecorder()
+	router.ServeHTTP(res, req)
 
-// 	var userID int64 = 1
-// 	var recordID int64 = 1
+	if res.Code != http.StatusCreated {
+		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
+	}
 
-// 	req := httptest.NewRequest(http.MethodPost, "/api/users/"+strconv.Itoa(int(userID))+"/records/"+strconv.Itoa(int(recordID))+"/comments", bytes.NewBuffer(reqBody))
-// 	req.Header.Set("Content-Type", "application/json")
-// 	res := httptest.NewRecorder()
-// 	router.ServeHTTP(res, req)
+	var resBody Record
+	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+	if resBody.ID == 0 {
+		t.Errorf("expected spot ID to be non-zero but got %v", resBody.ID)
+	}
+	if resBody.UserID != userID {
+		t.Errorf("expected record user id to be %v but got %v", userID, resBody.UserID)
+	}
+	if resBody.SpotID != spotID {
+		t.Errorf("expected record record id to be %v but got %v", spotID, resBody.SpotID)
+	}
+	if resBody.Date != record.Date {
+		t.Errorf("expected record date to be %v but got %v", record.Date, resBody.Date)
+	}
+	if resBody.Weather != record.Weather {
+		t.Errorf("expected record Weather to be %v but got %v", record.Weather, resBody.Weather)
+	}
+	if resBody.Temperature != record.Temperature {
+		t.Errorf("expected record Temperature to be %v but got %v", record.Temperature, resBody.Temperature)
+	}
+	if resBody.RunningTime != record.RunningTime {
+		t.Errorf("expected record RunningTime to be %v but got %v", record.RunningTime, resBody.RunningTime)
+	}
+	if resBody.Distance != record.Distance {
+		t.Errorf("expected record Distance to be %v but got %v", record.Distance, resBody.Distance)
+	}
+	if resBody.Description != record.Description {
+		t.Errorf("expected record Description to be %v but got %v", record.Description, resBody.Description)
+	}
+}
 
-// 	if res.Code != http.StatusCreated {
-// 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
-// 	}
+func TestUpdateRecord(t *testing.T) {
+	record := Record{
+		UserID:      1,
+		SpotID:      1,
+		Date:        "2023-01-01",
+		Weather:     "曇り",
+		Temperature: 23.4,
+		RunningTime: 4.5,
+		Distance:    201.6,
+		Description: "AAAAAAAAAAAAAA",
+	}
+	if err := DB.Create(&record).Error; err != nil {
+		t.Fatalf("failed to create test user: %v", err)
+	}
 
-// 	var resBody Comment
-// 	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
-// 		t.Fatalf("failed to unmarshal response body: %v", err)
-// 	}
-// 	if resBody.ID == 0 {
-// 		t.Errorf("expected spot ID to be non-zero but got %v", resBody.ID)
-// 	}
-// 	if resBody.UserID != userID {
-// 		t.Errorf("expected comment user id to be %v but got %v", userID, resBody.UserID)
-// 	}
-// 	if resBody.RecordID != recordID {
-// 		t.Errorf("expected comment record id to be %v but got %v", recordID, resBody.RecordID)
-// 	}
-// 	if resBody.UserName != comment.UserName {
-// 		t.Errorf("expected comment user name to be %v but got %v", comment.UserName, resBody.UserName)
-// 	}
-// 	if resBody.Text != comment.Text {
-// 		t.Errorf("expected comment text to be %v but got %v", comment.Text, resBody.Text)
-// 	}
-// }
+	updatedRecord := Record{
+		ID:          record.ID,
+		UserID:      1,
+		SpotID:      1,
+		Date:        "2023-02-01",
+		Weather:     "晴れ",
+		Temperature: 33.4,
+		RunningTime: 6.5,
+		Distance:    211.5,
+		Description: "BBBBBBBBBBBBB",
+	}
+	reqBody, err := json.Marshal(updatedRecord)
+	if err != nil {
+		t.Fatalf("failed to marshal request body: %v", err)
+	}
 
-// func TestUpdateComment(t *testing.T) {
-// 	comment := Comment{
-// 		UserID:   1,
-// 		RecordID: 1,
-// 		UserName: "Tester",
-// 		Text:     "FFFFFFFFFFF",
-// 	}
-// 	if err := DB.Create(&comment).Error; err != nil {
-// 		t.Fatalf("failed to create test user: %v", err)
-// 	}
+	router := NewRouter()
+	req := httptest.NewRequest(http.MethodPatch, "/api/users/"+strconv.Itoa(int(record.UserID))+"/spots/"+strconv.Itoa(int(record.SpotID))+"/records/"+strconv.Itoa(int(record.ID)), bytes.NewBuffer(reqBody))
+	req.Header.Set("Content-Type", "application/json")
+	res := httptest.NewRecorder()
+	router.ServeHTTP(res, req)
 
-// 	updatedComment := Comment{
-// 		ID:       comment.ID,
-// 		UserID:   1,
-// 		RecordID: 1,
-// 		UserName: "Update Tester",
-// 		Text:     "GGGGGGGGGGGG",
-// 	}
-// 	reqBody, err := json.Marshal(updatedComment)
-// 	if err != nil {
-// 		t.Fatalf("failed to marshal request body: %v", err)
-// 	}
+	if res.Code != http.StatusCreated {
+		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
+	}
 
-// 	router := NewRouter()
-// 	req := httptest.NewRequest(http.MethodPatch, "/api/users/"+strconv.Itoa(int(comment.UserID))+"/records/"+strconv.Itoa(int(comment.RecordID))+"/comments/"+strconv.Itoa(int(comment.ID)), bytes.NewBuffer(reqBody))
-// 	req.Header.Set("Content-Type", "application/json")
-// 	res := httptest.NewRecorder()
-// 	router.ServeHTTP(res, req)
-
-// 	if res.Code != http.StatusCreated {
-// 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
-// 	}
-
-// 	var resBody Comment
-// 	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
-// 		t.Fatalf("failed to unmarshal response body: %v", err)
-// 	}
-// 	if resBody.UserID != updatedComment.UserID {
-// 		t.Errorf("expected comment user id to be %v but got %v", updatedComment.UserID, resBody.UserID)
-// 	}
-// 	if resBody.UserID != updatedComment.RecordID {
-// 		t.Errorf("expected comment record id to be %v but got %v", updatedComment.RecordID, resBody.UserID)
-// 	}
-// 	if resBody.UserName != updatedComment.UserName {
-// 		t.Errorf("expected comment user name to be %v but got %v", updatedComment.UserName, resBody.UserName)
-// 	}
-// 	if resBody.Text != updatedComment.Text {
-// 		t.Errorf("expected comment text to be %v but got %v", updatedComment.Text, resBody.Text)
-// 	}
-// }
+	var resBody Record
+	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+	if resBody.ID == 0 {
+		t.Errorf("expected spot ID to be non-zero but got %v", resBody.ID)
+	}
+	if resBody.UserID != updatedRecord.UserID {
+		t.Errorf("expected record user id to be %v but got %v", updatedRecord.UserID, resBody.UserID)
+	}
+	if resBody.SpotID != updatedRecord.SpotID {
+		t.Errorf("expected record record id to be %v but got %v", updatedRecord.SpotID, resBody.SpotID)
+	}
+	if resBody.Date != updatedRecord.Date {
+		t.Errorf("expected record date to be %v but got %v", updatedRecord.Date, resBody.Date)
+	}
+	if resBody.Weather != updatedRecord.Weather {
+		t.Errorf("expected record Weather to be %v but got %v", updatedRecord.Weather, resBody.Weather)
+	}
+	if resBody.Temperature != updatedRecord.Temperature {
+		t.Errorf("expected record Temperature to be %v but got %v", updatedRecord.Temperature, resBody.Temperature)
+	}
+	if resBody.RunningTime != updatedRecord.RunningTime {
+		t.Errorf("expected record RunningTime to be %v but got %v", updatedRecord.RunningTime, resBody.RunningTime)
+	}
+	if resBody.Distance != updatedRecord.Distance {
+		t.Errorf("expected record Distance to be %v but got %v", updatedRecord.Distance, resBody.Distance)
+	}
+	if resBody.Description != updatedRecord.Description {
+		t.Errorf("expected record Description to be %v but got %v", updatedRecord.Description, resBody.Description)
+	}
+}
 
 // func TestDeleteComment(t *testing.T) {
 // 	router := NewRouter()
