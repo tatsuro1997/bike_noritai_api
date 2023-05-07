@@ -68,6 +68,13 @@ func CreateSpot(c echo.Context) error {
 		return err
 	}
 
+	userID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if userID == 0 {
+		return c.JSON(http.StatusBadRequest, "user ID is required")
+	}
+
+	spot.UserID = userID
+
 	DB.Create(&spot)
 	return c.JSON(http.StatusCreated, spot)
 }

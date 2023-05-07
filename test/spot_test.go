@@ -98,7 +98,7 @@ func TestGetUserSpot(t *testing.T) {
 }
 
 func TestCreateSpot(t *testing.T) {
-	e := echo.New()
+	router := NewRouter()
 
 	spot := Spot{
 		UserID:      1,
@@ -114,18 +114,16 @@ func TestCreateSpot(t *testing.T) {
 		Lat:         35.71021159216932,
 		Lng:         139.81076575474597,
 	}
+
 	reqBody, err := json.Marshal(spot)
 	if err != nil {
 		t.Fatalf("failed to marshal request body: %v", err)
 	}
+
 	req := httptest.NewRequest(http.MethodPost, "/api/users/1/spots", bytes.NewBuffer(reqBody))
 	req.Header.Set("Content-Type", "application/json")
 	res := httptest.NewRecorder()
-	c := e.NewContext(req, res)
-
-	if err := CreateSpot(c); err != nil {
-		t.Fatalf("failed to create user: %v", err)
-	}
+	router.ServeHTTP(res, req)
 
 	if res.Code != http.StatusCreated {
 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
