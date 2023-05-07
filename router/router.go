@@ -27,6 +27,7 @@ func NewRouter() *echo.Echo {
 
 	e.GET("api/users/:user_id/records", handler.GetUserRecords)
 	e.GET("api/spots/:spot_id/records", handler.GetSpotRecords)
+	e.POST("api/users/:user_id/spots/:spot_id/records", handler.CreateRecord)
 
 	e.GET("/api/users/:user_id/comments", handler.GetUserComments)
 	e.GET("/api/records/:record_id/comments", handler.GetRecordComments)

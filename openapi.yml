@@ -179,10 +179,7 @@ paths:
           $ref: "#/components/parameters/SpotId",
         ]
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Record"
+        $ref: "#/components/requestBodies/Record"
       responses:
         "201":
           description: Created
@@ -470,16 +467,7 @@ components:
         application/json:
           schema:
             type: object
-            required:
-              - "user_id"
-              - "spot_id"
             properties:
-              user_id:
-                type: integer
-                format: int64
-              spot_id:
-                type: integer
-                format: int64
               date:
                 type: string
                 format: date

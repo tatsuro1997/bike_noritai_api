@@ -3,7 +3,7 @@ package handler
 import (
 	"errors"
 	"net/http"
-	// "strconv"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -66,29 +66,29 @@ func GetSpotRecords(c echo.Context) error {
 // 	return c.JSON(http.StatusOK, comments)
 // }
 
-// func CreateComment(c echo.Context) error {
-// 	comment := Comment{}
+func CreateRecord(c echo.Context) error {
+	record := Record{}
 
-// 	if err := c.Bind(&comment); err != nil {
-// 		return err
-// 	}
+	if err := c.Bind(&record); err != nil {
+		return err
+	}
 
-// 	userID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
-// 	if userID == 0 {
-// 		return c.JSON(http.StatusBadRequest, "user ID is required")
-// 	}
+	userID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if userID == 0 {
+		return c.JSON(http.StatusBadRequest, "user ID is required")
+	}
 
-// 	recordID, _ := strconv.ParseInt(c.Param("record_id"), 10, 64)
-// 	if recordID == 0 {
-// 		return c.JSON(http.StatusBadRequest, "record ID is required")
-// 	}
+	spotID, _ := strconv.ParseInt(c.Param("spot_id"), 10, 64)
+	if spotID == 0 {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
+	}
 
-// 	comment.UserID = userID
-// 	comment.RecordID = recordID
+	record.UserID = userID
+	record.SpotID = spotID
 
-// 	DB.Create(&comment)
-// 	return c.JSON(http.StatusCreated, comment)
-// }
+	DB.Create(&record)
+	return c.JSON(http.StatusCreated, record)
+}
 
 // func UpdateComment(c echo.Context) error {
 // 	comment := new(Comment)
