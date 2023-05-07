@@ -131,39 +131,39 @@ func UpdateRecord(c echo.Context) error {
 	return c.JSON(http.StatusCreated, record)
 }
 
-// func DeleteComment(c echo.Context) error {
-// 	comment := new(Comment)
+func DeleteRecord(c echo.Context) error {
+	record := new(Record)
 
-// 	userID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
-// 	if userID == 0 {
-// 		return c.JSON(http.StatusBadRequest, "user ID is required")
-// 	}
+	userID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if userID == 0 {
+		return c.JSON(http.StatusBadRequest, "user ID is required")
+	}
 
-// 	recordID, _ := strconv.ParseInt(c.Param("record_id"), 10, 64)
-// 	if recordID == 0 {
-// 		return c.JSON(http.StatusBadRequest, "record ID is required")
-// 	}
+	spotID, _ := strconv.ParseInt(c.Param("spot_id"), 10, 64)
+	if spotID == 0 {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
+	}
 
-// 	commentID := c.Param("comment_id")
-// 	if commentID == "" {
-// 		return c.JSON(http.StatusBadRequest, "spot ID is required")
-// 	}
+	recordID := c.Param("record_id")
+	if recordID == "" {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
+	}
 
-// 	if err := DB.First(&comment, commentID).Error; err != nil {
-// 		return c.JSON(http.StatusBadRequest, err.Error())
-// 	}
+	if err := DB.First(&record, recordID).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
 
-// 	if comment.UserID != userID {
-// 		return c.JSON(http.StatusBadRequest, "user and comment do not match")
-// 	}
+	if record.UserID != userID {
+		return c.JSON(http.StatusBadRequest, "user and record do not match")
+	}
 
-// 	if comment.RecordID != recordID {
-// 		return c.JSON(http.StatusBadRequest, "record and comment do not match")
-// 	}
+	if record.SpotID != spotID {
+		return c.JSON(http.StatusBadRequest, "spot and record do not match")
+	}
 
-// 	if err := DB.Where("id = ?", commentID).Delete(&comment).Error; err != nil {
-// 		return c.JSON(http.StatusBadRequest, err.Error())
-// 	}
+	if err := DB.Where("id = ?", recordID).Delete(&record).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
 
-// 	return c.JSON(http.StatusNoContent, comment)
-// }
+	return c.JSON(http.StatusNoContent, record)
+}

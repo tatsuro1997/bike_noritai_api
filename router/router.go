@@ -30,6 +30,7 @@ func NewRouter() *echo.Echo {
 	e.GET("/api/records/:record_id", handler.GetRecord)
 	e.POST("/api/users/:user_id/spots/:spot_id/records", handler.CreateRecord)
 	e.PATCH("/api/users/:user_id/spots/:spot_id/records/:record_id", handler.UpdateRecord)
+	e.DELETE("/api/users/:user_id/spots/:spot_id/records/:record_id", handler.DeleteRecord)
 
 	e.GET("/api/users/:user_id/comments", handler.GetUserComments)
 	e.GET("/api/records/:record_id/comments", handler.GetRecordComments)
