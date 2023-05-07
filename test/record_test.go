@@ -3,8 +3,8 @@ package test
 import (
 	"bytes"
 	"encoding/json"
-	// "errors"
-	// "gorm.io/gorm"
+	"errors"
+	"gorm.io/gorm"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -215,19 +215,19 @@ func TestUpdateRecord(t *testing.T) {
 	}
 }
 
-// func TestDeleteComment(t *testing.T) {
-// 	router := NewRouter()
-// 	req := httptest.NewRequest(http.MethodDelete, "/api/users/1/records/1/comments/1", nil)
-// 	res := httptest.NewRecorder()
-// 	router.ServeHTTP(res, req)
+func TestDeleteRecord(t *testing.T) {
+	router := NewRouter()
+	req := httptest.NewRequest(http.MethodDelete, "/api/users/1/spots/1/records/1", nil)
+	res := httptest.NewRecorder()
+	router.ServeHTTP(res, req)
 
-// 	if res.Code != http.StatusNoContent {
-// 		t.Errorf("expected status code %v, but got %v", http.StatusNoContent, res.Code)
-// 	}
+	if res.Code != http.StatusNoContent {
+		t.Errorf("expected status code %v, but got %v", http.StatusNoContent, res.Code)
+	}
 
-// 	var deletedComment *Comment
-// 	err := DB.First(&deletedComment, "1").Error
-// 	if !errors.Is(err, gorm.ErrRecordNotFound) {
-// 		t.Errorf("expected spot record to be deleted, but found: %v", deletedComment)
-// 	}
-// }
+	var deletedRecord *Record
+	err := DB.First(&deletedRecord, "1").Error
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		t.Errorf("expected record to be deleted, but found: %v", deletedRecord)
+	}
+}
