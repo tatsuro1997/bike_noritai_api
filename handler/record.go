@@ -90,46 +90,46 @@ func CreateRecord(c echo.Context) error {
 	return c.JSON(http.StatusCreated, record)
 }
 
-// func UpdateComment(c echo.Context) error {
-// 	comment := new(Comment)
+func UpdateRecord(c echo.Context) error {
+	record := new(Record)
 
-// 	userID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
-// 	if userID == 0 {
-// 		return c.JSON(http.StatusBadRequest, "user ID is required")
-// 	}
+	userID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if userID == 0 {
+		return c.JSON(http.StatusBadRequest, "user ID is required")
+	}
 
-// 	recordID, _ := strconv.ParseInt(c.Param("record_id"), 10, 64)
-// 	if recordID == 0 {
-// 		return c.JSON(http.StatusBadRequest, "record ID is required")
-// 	}
+	spotID, _ := strconv.ParseInt(c.Param("spot_id"), 10, 64)
+	if spotID == 0 {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
+	}
 
-// 	commentID := c.Param("comment_id")
-// 	if commentID == "" {
-// 		return c.JSON(http.StatusBadRequest, "comment ID is required")
-// 	}
+	recordID := c.Param("record_id")
+	if recordID == "" {
+		return c.JSON(http.StatusBadRequest, "record ID is required")
+	}
 
-// 	if err := DB.First(&comment, commentID).Error; err != nil {
-// 		return c.JSON(http.StatusBadRequest, err.Error())
-// 	}
+	if err := DB.First(&record, recordID).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
 
-// 	if comment.UserID != userID {
-// 		return c.JSON(http.StatusBadRequest, "user and comment do not match")
-// 	}
+	if record.UserID != userID {
+		return c.JSON(http.StatusBadRequest, "user and record do not match")
+	}
 
-// 	if comment.RecordID != recordID {
-// 		return c.JSON(http.StatusBadRequest, "record and comment do not match")
-// 	}
+	if record.SpotID != spotID {
+		return c.JSON(http.StatusBadRequest, "spot and record do not match")
+	}
 
-// 	if err := c.Bind(&comment); err != nil {
-// 		return c.JSON(http.StatusBadRequest, err.Error())
-// 	}
+	if err := c.Bind(&record); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
 
-// 	if err := DB.Model(&comment).Where("id=?", comment.ID).Updates(&comment).Error; err != nil {
-// 		return c.JSON(http.StatusBadRequest, err.Error())
-// 	}
+	if err := DB.Model(&record).Where("id=?", record.ID).Updates(&record).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
 
-// 	return c.JSON(http.StatusCreated, comment)
-// }
+	return c.JSON(http.StatusCreated, record)
+}
 
 // func DeleteComment(c echo.Context) error {
 // 	comment := new(Comment)

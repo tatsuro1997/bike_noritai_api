@@ -154,6 +154,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Record"
+
   "/api/spots/{spot_id}/records":
     get:
       description: スポット毎ツーリング記録一覧取得
@@ -169,20 +170,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Record"
-  "/api/users/{user_id}/spots/{spot_id}/records":
-    post:
-      description: ツーリング記録登録
-      operationId: RecordCreate
-      parameters:
-        [
-          $ref: "#/components/parameters/UserId",
-          $ref: "#/components/parameters/SpotId",
-        ]
-      requestBody:
-        $ref: "#/components/requestBodies/Record"
-      responses:
-        "201":
-          description: Created
 
   "/api/records/{record_id}":
     get:
@@ -199,12 +186,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Record"
+
+  "/api/users/{user_id}/spots/{spot_id}/records":
+    post:
+      description: ツーリング記録登録
+      operationId: RecordCreate
+      parameters:
+        [
+          $ref: "#/components/parameters/UserId",
+          $ref: "#/components/parameters/SpotId",
+        ]
+      requestBody:
+        $ref: "#/components/requestBodies/Record"
+      responses:
+        "201":
+          description: Created
+
+  "/api/users/{user_id}/spots/{spot_id}/records/{record_id}":
     patch:
       description: ツーリング記録更新
       operationId: RecordUpdate
       parameters:
         [
           $ref: "#/components/parameters/UserId",
+          $ref: "#/components/parameters/SpotId",
           $ref: "#/components/parameters/RecordId"
         ]
       requestBody:
