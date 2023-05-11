@@ -73,7 +73,7 @@ func init() {
 		{
 			UserID:      1,
 			Name:        "豊受大神宮 (伊勢神宮 外宮）",
-			Image:       "http://test.com",
+			Image:       "",
 			Type:        "観光",
 			Address:     "三重県伊勢市豊川町２７９",
 			HpURL:       "https://www.isejingu.or.jp/about/geku/",
@@ -87,7 +87,7 @@ func init() {
 		{
 			UserID:      1,
 			Name:        "伊勢神宮（内宮）",
-			Image:       "http://test.com",
+			Image:       "",
 			Type:        "観光",
 			Address:     "三重県伊勢市宇治館町１",
 			HpURL:       "https://www.isejingu.or.jp/",
