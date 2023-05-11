@@ -3,7 +3,6 @@ package repository
 import (
 	"log"
 	"os"
-	"time"
 
 	. "bike_noritai_api/model"
 
@@ -105,7 +104,7 @@ func init() {
 		{
 			UserID:      users[0].ID,
 			SpotID:      spots[0].ID,
-			Date:        time.Now().Format("2023-01-01"),
+			Date:        "2023-01-01",
 			Weather:     "晴れ",
 			Temperature: 23.4,
 			RunningTime: 4,
@@ -115,7 +114,7 @@ func init() {
 		{
 			UserID:      users[0].ID,
 			SpotID:      spots[1].ID,
-			Date:        time.Now().Format("2023-01-01"),
+			Date:        "2023-01-01",
 			Weather:     "曇り",
 			Temperature: 26.1,
 			RunningTime: 7,
@@ -125,7 +124,7 @@ func init() {
 		{
 			UserID:      users[1].ID,
 			SpotID:      spots[0].ID,
-			Date:        time.Now().Format("2023-01-01"),
+			Date:        "2023-01-01",
 			Weather:     "雨",
 			Temperature: 13.4,
 			RunningTime: 2,
@@ -135,7 +134,7 @@ func init() {
 		{
 			UserID:      users[1].ID,
 			SpotID:      spots[1].ID,
-			Date:        time.Now().Format("2023-01-01"),
+			Date:        "2023-01-01",
 			Weather:     "晴れ",
 			Temperature: 33.4,
 			RunningTime: 6,

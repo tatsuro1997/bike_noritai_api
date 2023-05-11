@@ -143,6 +143,18 @@ paths:
         "204":
           description: No Content
 
+  "/api/records":
+    get:
+      description: ツーリング記録一覧取得
+      operationId: RecordIndex
+      responses:
+        "200":
+          description: ツーリング記録データ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+
   "/api/users/{user_id}/records":
     get:
       description: ツーリング記録一覧取得

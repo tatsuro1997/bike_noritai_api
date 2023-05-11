@@ -12,6 +12,19 @@ import (
 	. "bike_noritai_api/repository"
 )
 
+func GetRecords(c echo.Context) error {
+	records := []Record{}
+
+	if err := DB.Find(&records).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(http.StatusNotFound, "records not found")
+		}
+		return err
+	}
+
+	return c.JSON(http.StatusOK, records)
+}
+
 func GetUserRecords(c echo.Context) error {
 	records := []Record{}
 

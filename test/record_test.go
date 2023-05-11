@@ -16,6 +16,29 @@ import (
 	. "bike_noritai_api/router"
 )
 
+func TestGetRecords(t *testing.T) {
+	router := NewRouter()
+	req := httptest.NewRequest(http.MethodGet, "/api/records", nil)
+	res := httptest.NewRecorder()
+	router.ServeHTTP(res, req)
+
+	if res.Code != http.StatusOK {
+		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
+	}
+
+	expectedBody := `"id":1,"user_id":1,"spot_id":1,"date":"2023-01-01","weather":"晴れ","temperature":23.4,"running_time":4,"distance":120.4,"description":"最高のツーリング日和でした！"`
+
+	expectedBody2 := `"id":2,"user_id":1,"spot_id":2,"date":"2023-01-01","weather":"曇り","temperature":26.1,"running_time":7,"distance":184.1,"description":"なんとか天気が持って良かったです！"`
+
+	if !strings.Contains(res.Body.String(), expectedBody) {
+		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
+	}
+
+	if !strings.Contains(res.Body.String(), expectedBody2) {
+		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody2)
+	}
+}
+
 func TestGetUserRecords(t *testing.T) {
 	router := NewRouter()
 	req := httptest.NewRequest(http.MethodGet, "/api/users/1/records", nil)
@@ -26,9 +49,9 @@ func TestGetUserRecords(t *testing.T) {
 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
 	}
 
-	expectedBody := `"id":1,"user_id":1,"spot_id":1,"date":"70710-05-05","weather":"晴れ","temperature":23.4,"running_time":4,"distance":120.4,"description":"最高のツーリング日和でした！"`
+	expectedBody := `"id":1,"user_id":1,"spot_id":1,"date":"2023-01-01","weather":"晴れ","temperature":23.4,"running_time":4,"distance":120.4,"description":"最高のツーリング日和でした！"`
 
-	expectedBody2 := `"id":2,"user_id":1,"spot_id":2,"date":"70710-05-05","weather":"曇り","temperature":26.1,"running_time":7,"distance":184.1,"description":"なんとか天気が持って良かったです！"`
+	expectedBody2 := `"id":2,"user_id":1,"spot_id":2,"date":"2023-01-01","weather":"曇り","temperature":26.1,"running_time":7,"distance":184.1,"description":"なんとか天気が持って良かったです！"`
 
 	if !strings.Contains(res.Body.String(), expectedBody) {
 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
@@ -49,9 +72,9 @@ func TestGetSpotRecords(t *testing.T) {
 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
 	}
 
-	expectedBody := `"id":1,"user_id":1,"spot_id":1,"date":"70710-05-05","weather":"晴れ","temperature":23.4,"running_time":4,"distance":120.4,"description":"最高のツーリング日和でした！"`
+	expectedBody := `"id":1,"user_id":1,"spot_id":1,"date":"2023-01-01","weather":"晴れ","temperature":23.4,"running_time":4,"distance":120.4,"description":"最高のツーリング日和でした！"`
 
-	expectedBody2 := `"id":3,"user_id":2,"spot_id":1,"date":"70710-05-05","weather":"雨","temperature":13.4,"running_time":2,"distance":50.6,"description":"朝から雨で大変でした。"`
+	expectedBody2 := `"id":3,"user_id":2,"spot_id":1,"date":"2023-01-01","weather":"雨","temperature":13.4,"running_time":2,"distance":50.6,"description":"朝から雨で大変でした。"`
 
 	if !strings.Contains(res.Body.String(), expectedBody) {
 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
@@ -72,7 +95,7 @@ func TestGetRecord(t *testing.T) {
 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
 	}
 
-	expectedBody := `"id":1,"user_id":1,"spot_id":1,"date":"70710-05-05","weather":"晴れ","temperature":23.4,"running_time":4,"distance":120.4,"description":"最高のツーリング日和でした！"`
+	expectedBody := `"id":1,"user_id":1,"spot_id":1,"date":"2023-01-01","weather":"晴れ","temperature":23.4,"running_time":4,"distance":120.4,"description":"最高のツーリング日和でした！"`
 
 	if !strings.Contains(res.Body.String(), expectedBody) {
 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)

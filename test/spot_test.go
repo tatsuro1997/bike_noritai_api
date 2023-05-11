@@ -29,9 +29,9 @@ func TestGetSpots(t *testing.T) {
 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
 	}
 
-	expectedBody := `"id":1,"user_id":1,"name":"豊受大神宮 (伊勢神宮 外宮）","image":"http://test.com","type":"観光","address":"三重県伊勢市豊川町２７９","hp_url":"https://www.isejingu.or.jp/about/geku/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"外宮から行くのが良いみたいですよ。","lat":34.4879,"lng":136.704`
+	expectedBody := `"id":1,"user_id":1,"name":"豊受大神宮 (伊勢神宮 外宮）","image":"","type":"観光","address":"三重県伊勢市豊川町２７９","hp_url":"https://www.isejingu.or.jp/about/geku/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"外宮から行くのが良いみたいですよ。","lat":34.4879,"lng":136.704`
 
-	expectedBody2 := `"id":2,"user_id":1,"name":"伊勢神宮（内宮）","image":"http://test.com","type":"観光","address":"三重県伊勢市宇治館町１","hp_url":"https://www.isejingu.or.jp/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"日本最大の由緒正しき神社です。","lat":34.4562,"lng":136.726`
+	expectedBody2 := `"id":2,"user_id":1,"name":"伊勢神宮（内宮）","image":"","type":"観光","address":"三重県伊勢市宇治館町１","hp_url":"https://www.isejingu.or.jp/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"日本最大の由緒正しき神社です。","lat":34.4562,"lng":136.726`
 
 	if !strings.Contains(res.Body.String(), expectedBody) {
 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
@@ -56,7 +56,7 @@ func TestGetSpot(t *testing.T) {
 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
 	}
 
-	expectedBody := `"id":1,"user_id":1,"name":"豊受大神宮 (伊勢神宮 外宮）","image":"http://test.com","type":"観光","address":"三重県伊勢市豊川町２７９","hp_url":"https://www.isejingu.or.jp/about/geku/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"外宮から行くのが良いみたいですよ。","lat":34.487865,"lng":136.70374`
+	expectedBody := `"id":1,"user_id":1,"name":"豊受大神宮 (伊勢神宮 外宮）","image":"","type":"観光","address":"三重県伊勢市豊川町２７９","hp_url":"https://www.isejingu.or.jp/about/geku/","open_time":"5:00~18:00","off_day":"","parking":true,"description":"外宮から行くのが良いみたいですよ。","lat":34.487865,"lng":136.70374`
 
 	if !strings.Contains(res.Body.String(), expectedBody) {
 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
