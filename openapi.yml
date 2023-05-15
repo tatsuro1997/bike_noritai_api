@@ -246,26 +246,35 @@ paths:
         "204":
           description: No Content
 
-  "/api/users/{user_id}/records/{record_id}/record_likes":
+  "/api/likes":
     get:
-      description: ツーリングいいね数
-      operationId: RecordLikeCount
-      parameters:
-        [
-          $ref: "#/components/parameters/UserId",
-          $ref: "#/components/parameters/RecordId"
-        ]
+      description: ツーリングいいね
+      operationId: LikeIndex
       responses:
         "200":
-          description: ツーリング記録データ数
+          description: ツーリングいいね
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    format: int64
+                $ref: "#/components/schemas/Like"
+
+  "/api/like":
+    post:
+      description: ツーリングいいね作成
+      operationId: LikeCreate
+      requestBody:
+        $ref: "#/components/requestBodies/Like"
+      responses:
+        "201":
+          description: Created
+    delete:
+      description: ツーリングいいね削除
+      operationId: LikeDelete
+      requestBody:
+        $ref: "#/components/requestBodies/Like"
+      responses:
+        "204":
+          description: No content
 
   "/api/users/{user_id}/comments":
     get:
@@ -501,19 +510,19 @@ components:
                 format: float
               description:
                 type: string
-    RecordLike:
+    Like:
       content:
         application/json:
           schema:
             type: object
             required:
               - "user_id"
-              - "spot_id"
+              - "record_id"
             properties:
               user_id:
                 type: integer
                 format: int64
-              spot_id:
+              record_id:
                 type: integer
                 format: int64
     Comment:
@@ -648,7 +657,7 @@ components:
           type: string
           format: date-time
 
-    RecordLike:
+    Like:
       type: object
       properties:
         id:
@@ -657,7 +666,7 @@ components:
         user_id:
           type: integer
           format: int64
-        spot_id:
+        record_id:
           type: integer
           format: int64
         created_at:

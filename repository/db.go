@@ -37,12 +37,14 @@ func init() {
 	DB.Migrator().DropTable(&Record{})
 	DB.Migrator().DropTable(&Comment{})
 	DB.Migrator().DropTable(&Bookmark{})
+	DB.Migrator().DropTable(&Like{})
 
 	DB.AutoMigrate(&User{})
 	DB.AutoMigrate(&Spot{})
 	DB.AutoMigrate(&Record{})
 	DB.AutoMigrate(&Comment{})
 	DB.AutoMigrate(&Bookmark{})
+	DB.AutoMigrate(&Like{})
 
 	users := []User{
 		{
@@ -191,4 +193,32 @@ func init() {
 		},
 	}
 	DB.Create(&bookmarks)
+
+	likes := []Like{
+		{
+			UserID:   users[0].ID,
+			RecordID: records[0].ID,
+		},
+		{
+			UserID:   users[0].ID,
+			RecordID: records[1].ID,
+		},
+		{
+			UserID:   users[0].ID,
+			RecordID: records[2].ID,
+		},
+		{
+			UserID:   users[0].ID,
+			RecordID: records[3].ID,
+		},
+		{
+			UserID:   users[1].ID,
+			RecordID: records[0].ID,
+		},
+		{
+			UserID:   users[1].ID,
+			RecordID: records[1].ID,
+		},
+	}
+	DB.Create(&likes)
 }
