@@ -21,7 +21,11 @@ func GetLikes(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, likes)
+	response := map[string]interface{}{
+		"likes": likes,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func CreateLike(c echo.Context) error {
@@ -33,7 +37,11 @@ func CreateLike(c echo.Context) error {
 
 	DB.Create(&like)
 
-	return c.JSON(http.StatusCreated, like)
+	response := map[string]interface{}{
+		"likes": like,
+	}
+
+	return c.JSON(http.StatusCreated, response)
 }
 
 func DeleteLike(c echo.Context) error {
@@ -47,5 +55,9 @@ func DeleteLike(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	return c.JSON(http.StatusNoContent, like)
+	response := map[string]interface{}{
+		"likes": like,
+	}
+
+	return c.JSON(http.StatusNoContent, response)
 }
