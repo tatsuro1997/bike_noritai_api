@@ -18,7 +18,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                type: object
+                properties:
+                  users:
+                    $ref: "#/components/schemas/User"
     post:
       description: ユーザー登録
       operationId: UserCreate
@@ -40,7 +43,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
     patch:
       description: ユーザー更新
       operationId: UserUpdate
@@ -70,7 +76,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Spot"
+                type: object
+                properties:
+                  spots:
+                    $ref: "#/components/schemas/Spot"
 
   "/api/spots/{spot_id}":
     get:
@@ -84,7 +93,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Spot"
+                type: object
+                properties:
+                  spot:
+                    $ref: "#/components/schemas/Spot"
 
   "/api/users/{user_id}/spots":
     get:
@@ -100,7 +112,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Spot"
+                type: object
+                properties:
+                  spots:
+                    $ref: "#/components/schemas/Spot"
     post:
       description: スポット登録
       operationId: SpotCreate
@@ -153,7 +168,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Record"
+                type: object
+                properties:
+                  records:
+                    $ref: "#/components/schemas/Record"
 
   "/api/users/{user_id}/records":
     get:
@@ -169,7 +187,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Record"
+                type: object
+                properties:
+                  records:
+                    $ref: "#/components/schemas/Record"
 
   "/api/spots/{spot_id}/records":
     get:
@@ -185,7 +206,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Record"
+                type: object
+                properties:
+                  records:
+                    $ref: "#/components/schemas/Record"
 
   "/api/records/{record_id}":
     get:
@@ -201,7 +225,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Record"
+                type: object
+                properties:
+                  record:
+                    $ref: "#/components/schemas/Record"
 
   "/api/users/{user_id}/spots/{spot_id}/records":
     post:
@@ -256,7 +283,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Like"
+                type: object
+                properties:
+                  likes:
+                    $ref: "#/components/schemas/Like"
 
   "/api/like":
     post:
@@ -290,7 +320,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Comment"
+                type: object
+                properties:
+                  comments:
+                    $ref: "#/components/schemas/Comment"
 
   "/api/records/{record_id}/comments":
     get:
@@ -306,7 +339,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Comment"
+                type: object
+                properties:
+                  comments:
+                    $ref: "#/components/schemas/Comment"
 
   "/api/users/{user_id}/records/{record_id}/comments":
     post:
@@ -364,7 +400,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Bookmark"
+                type: object
+                properties:
+                  bookmarks:
+                    $ref: "#/components/schemas/Bookmark"
   "/api/users/{user_id}/spots/{spot_id}/bookmarks":
     post:
       description: ブックマーク作成
