@@ -131,36 +131,39 @@ func TestCreateRecord(t *testing.T) {
 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
 	}
 
-	var resBody Record
-	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
-		t.Fatalf("failed to unmarshal response body: %v", err)
+	resBody := ResponseRecordBody{}
+	if err := json.Unmarshal([]byte(res.Body.Bytes()), &resBody); err != nil {
+		t.Fatalf("Failed to unmarshal response body: %v", err)
+		return
 	}
-	if resBody.ID == 0 {
-		t.Errorf("expected spot ID to be non-zero but got %v", resBody.ID)
+
+	resRecord := resBody.Record
+	if resRecord.ID == 0 {
+		t.Errorf("expected spot ID to be non-zero but got %v", resRecord.ID)
 	}
-	if resBody.UserID != userID {
-		t.Errorf("expected record user id to be %v but got %v", userID, resBody.UserID)
+	if resRecord.UserID != userID {
+		t.Errorf("expected record user id to be %v but got %v", userID, resRecord.UserID)
 	}
-	if resBody.SpotID != spotID {
-		t.Errorf("expected record record id to be %v but got %v", spotID, resBody.SpotID)
+	if resRecord.SpotID != spotID {
+		t.Errorf("expected record record id to be %v but got %v", spotID, resRecord.SpotID)
 	}
-	if resBody.Date != record.Date {
-		t.Errorf("expected record date to be %v but got %v", record.Date, resBody.Date)
+	if resRecord.Date != record.Date {
+		t.Errorf("expected record date to be %v but got %v", record.Date, resRecord.Date)
 	}
-	if resBody.Weather != record.Weather {
-		t.Errorf("expected record Weather to be %v but got %v", record.Weather, resBody.Weather)
+	if resRecord.Weather != record.Weather {
+		t.Errorf("expected record Weather to be %v but got %v", record.Weather, resRecord.Weather)
 	}
-	if resBody.Temperature != record.Temperature {
-		t.Errorf("expected record Temperature to be %v but got %v", record.Temperature, resBody.Temperature)
+	if resRecord.Temperature != record.Temperature {
+		t.Errorf("expected record Temperature to be %v but got %v", record.Temperature, resRecord.Temperature)
 	}
-	if resBody.RunningTime != record.RunningTime {
-		t.Errorf("expected record RunningTime to be %v but got %v", record.RunningTime, resBody.RunningTime)
+	if resRecord.RunningTime != record.RunningTime {
+		t.Errorf("expected record RunningTime to be %v but got %v", record.RunningTime, resRecord.RunningTime)
 	}
-	if resBody.Distance != record.Distance {
-		t.Errorf("expected record Distance to be %v but got %v", record.Distance, resBody.Distance)
+	if resRecord.Distance != record.Distance {
+		t.Errorf("expected record Distance to be %v but got %v", record.Distance, resRecord.Distance)
 	}
-	if resBody.Description != record.Description {
-		t.Errorf("expected record Description to be %v but got %v", record.Description, resBody.Description)
+	if resRecord.Description != record.Description {
+		t.Errorf("expected record Description to be %v but got %v", record.Description, resRecord.Description)
 	}
 }
 
@@ -205,36 +208,39 @@ func TestUpdateRecord(t *testing.T) {
 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
 	}
 
-	var resBody Record
-	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
-		t.Fatalf("failed to unmarshal response body: %v", err)
+	resBody := ResponseRecordBody{}
+	if err := json.Unmarshal([]byte(res.Body.Bytes()), &resBody); err != nil {
+		t.Fatalf("Failed to unmarshal response body: %v", err)
+		return
 	}
-	if resBody.ID == 0 {
-		t.Errorf("expected spot ID to be non-zero but got %v", resBody.ID)
+
+	resRecord := resBody.Record
+	if resRecord.ID == 0 {
+		t.Errorf("expected spot ID to be non-zero but got %v", resRecord.ID)
 	}
-	if resBody.UserID != updatedRecord.UserID {
-		t.Errorf("expected record user id to be %v but got %v", updatedRecord.UserID, resBody.UserID)
+	if resRecord.UserID != updatedRecord.UserID {
+		t.Errorf("expected record user id to be %v but got %v", updatedRecord.UserID, resRecord.UserID)
 	}
-	if resBody.SpotID != updatedRecord.SpotID {
-		t.Errorf("expected record record id to be %v but got %v", updatedRecord.SpotID, resBody.SpotID)
+	if resRecord.SpotID != updatedRecord.SpotID {
+		t.Errorf("expected record record id to be %v but got %v", updatedRecord.SpotID, resRecord.SpotID)
 	}
-	if resBody.Date != updatedRecord.Date {
-		t.Errorf("expected record date to be %v but got %v", updatedRecord.Date, resBody.Date)
+	if resRecord.Date != updatedRecord.Date {
+		t.Errorf("expected record date to be %v but got %v", updatedRecord.Date, resRecord.Date)
 	}
-	if resBody.Weather != updatedRecord.Weather {
-		t.Errorf("expected record Weather to be %v but got %v", updatedRecord.Weather, resBody.Weather)
+	if resRecord.Weather != updatedRecord.Weather {
+		t.Errorf("expected record Weather to be %v but got %v", updatedRecord.Weather, resRecord.Weather)
 	}
-	if resBody.Temperature != updatedRecord.Temperature {
-		t.Errorf("expected record Temperature to be %v but got %v", updatedRecord.Temperature, resBody.Temperature)
+	if resRecord.Temperature != updatedRecord.Temperature {
+		t.Errorf("expected record Temperature to be %v but got %v", updatedRecord.Temperature, resRecord.Temperature)
 	}
-	if resBody.RunningTime != updatedRecord.RunningTime {
-		t.Errorf("expected record RunningTime to be %v but got %v", updatedRecord.RunningTime, resBody.RunningTime)
+	if resRecord.RunningTime != updatedRecord.RunningTime {
+		t.Errorf("expected record RunningTime to be %v but got %v", updatedRecord.RunningTime, resRecord.RunningTime)
 	}
-	if resBody.Distance != updatedRecord.Distance {
-		t.Errorf("expected record Distance to be %v but got %v", updatedRecord.Distance, resBody.Distance)
+	if resRecord.Distance != updatedRecord.Distance {
+		t.Errorf("expected record Distance to be %v but got %v", updatedRecord.Distance, resRecord.Distance)
 	}
-	if resBody.Description != updatedRecord.Description {
-		t.Errorf("expected record Description to be %v but got %v", updatedRecord.Description, resBody.Description)
+	if resRecord.Description != updatedRecord.Description {
+		t.Errorf("expected record Description to be %v but got %v", updatedRecord.Description, resRecord.Description)
 	}
 }
 

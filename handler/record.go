@@ -22,7 +22,11 @@ func GetRecords(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, records)
+	response := map[string]interface{}{
+		"records": records,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func GetUserRecords(c echo.Context) error {
@@ -40,7 +44,11 @@ func GetUserRecords(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, records)
+	response := map[string]interface{}{
+		"records": records,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func GetSpotRecords(c echo.Context) error {
@@ -58,7 +66,11 @@ func GetSpotRecords(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, records)
+	response := map[string]interface{}{
+		"records": records,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func GetRecord(c echo.Context) error {
@@ -76,7 +88,11 @@ func GetRecord(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, record)
+	response := map[string]interface{}{
+		"record": record,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func CreateRecord(c echo.Context) error {
@@ -100,7 +116,12 @@ func CreateRecord(c echo.Context) error {
 	record.SpotID = spotID
 
 	DB.Create(&record)
-	return c.JSON(http.StatusCreated, record)
+
+	response := map[string]interface{}{
+		"record": record,
+	}
+
+	return c.JSON(http.StatusCreated, response)
 }
 
 func UpdateRecord(c echo.Context) error {
@@ -141,7 +162,11 @@ func UpdateRecord(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	return c.JSON(http.StatusCreated, record)
+	response := map[string]interface{}{
+		"record": record,
+	}
+
+	return c.JSON(http.StatusCreated, response)
 }
 
 func DeleteRecord(c echo.Context) error {
@@ -178,5 +203,9 @@ func DeleteRecord(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	return c.JSON(http.StatusNoContent, record)
+	response := map[string]interface{}{
+		"record": record,
+	}
+
+	return c.JSON(http.StatusNoContent, response)
 }

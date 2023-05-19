@@ -2,6 +2,10 @@ package model
 
 import "time"
 
+type ResponseRecordBody struct {
+	Record Record `json:"record"`
+}
+
 type Record struct {
 	ID          int64     `json:"id"`
 	UserID      int64     `json:"user_id"`
