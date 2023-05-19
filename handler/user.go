@@ -21,7 +21,11 @@ func GetUsers(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, users)
+	response := map[string]interface{}{
+		"users": users,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func GetUser(c echo.Context) error {
@@ -39,7 +43,11 @@ func GetUser(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, user)
+	response := map[string]interface{}{
+		"user": user,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func CreateUser(c echo.Context) error {
@@ -50,7 +58,12 @@ func CreateUser(c echo.Context) error {
 	}
 
 	DB.Create(&user)
-	return c.JSON(http.StatusCreated, user)
+
+	response := map[string]interface{}{
+		"user": user,
+	}
+
+	return c.JSON(http.StatusCreated, response)
 }
 
 func UpdateUser(c echo.Context) error {
@@ -73,7 +86,11 @@ func UpdateUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	return c.JSON(http.StatusCreated, user)
+	response := map[string]interface{}{
+		"user": user,
+	}
+
+	return c.JSON(http.StatusCreated, response)
 }
 
 func DeleteUser(c echo.Context) error {
@@ -88,5 +105,9 @@ func DeleteUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	return c.JSON(http.StatusNoContent, user)
+	response := map[string]interface{}{
+		"user": user,
+	}
+
+	return c.JSON(http.StatusNoContent, response)
 }

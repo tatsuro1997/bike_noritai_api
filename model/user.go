@@ -2,6 +2,10 @@ package model
 
 import "time"
 
+type ResponseUserBody struct {
+	User User `json:"user"`
+}
+
 type User struct {
 	ID         int64     `json:"id"`
 	Name       string    `json:"name"`
