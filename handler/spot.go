@@ -22,7 +22,11 @@ func GetSpots(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, spots)
+	response := map[string]interface{}{
+		"spots": spots,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func GetSpot(c echo.Context) error {
@@ -40,10 +44,14 @@ func GetSpot(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, spot)
+	response := map[string]interface{}{
+		"spot": spot,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
-func GetUserSpot(c echo.Context) error {
+func GetUserSpots(c echo.Context) error {
 	spots := []Spot{}
 
 	userID := c.Param("user_id")
@@ -58,7 +66,11 @@ func GetUserSpot(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, spots)
+	response := map[string]interface{}{
+		"spots": spots,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func CreateSpot(c echo.Context) error {
@@ -76,7 +88,12 @@ func CreateSpot(c echo.Context) error {
 	spot.UserID = userID
 
 	DB.Create(&spot)
-	return c.JSON(http.StatusCreated, spot)
+
+	response := map[string]interface{}{
+		"spot": spot,
+	}
+
+	return c.JSON(http.StatusCreated, response)
 }
 
 func UpdateSpot(c echo.Context) error {
@@ -108,7 +125,11 @@ func UpdateSpot(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	return c.JSON(http.StatusCreated, spot)
+	response := map[string]interface{}{
+		"spot": spot,
+	}
+
+	return c.JSON(http.StatusCreated, response)
 }
 
 func DeleteSpot(c echo.Context) error {
@@ -136,5 +157,9 @@ func DeleteSpot(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	return c.JSON(http.StatusNoContent, spot)
+	response := map[string]interface{}{
+		"spot": spot,
+	}
+
+	return c.JSON(http.StatusNoContent, response)
 }

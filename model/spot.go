@@ -2,6 +2,10 @@ package model
 
 import "time"
 
+type ResponseBody struct {
+	Spot Spot `json:"spot"`
+}
+
 type Spot struct {
 	ID          int64     `json:"id"`
 	UserID      int64     `json:"user_id"`

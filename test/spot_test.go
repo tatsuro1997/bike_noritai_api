@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 
 	. "bike_noritai_api/handler"
 	. "bike_noritai_api/model"
@@ -63,7 +64,7 @@ func TestGetSpot(t *testing.T) {
 	}
 }
 
-func TestGetUserSpot(t *testing.T) {
+func TestGetUserSpots(t *testing.T) {
 	spot := Spot{
 		UserID:      2,
 		Name:        "東京スカイツリー",
@@ -129,48 +130,51 @@ func TestCreateSpot(t *testing.T) {
 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
 	}
 
-	var resBody Spot
-	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
-		t.Fatalf("failed to unmarshal response body: %v", err)
+	resBody := ResponseBody{}
+	if err := json.Unmarshal([]byte(res.Body.Bytes()), &resBody); err != nil {
+		t.Fatalf("Failed to unmarshal response body: %v", err)
+		return
 	}
-	if resBody.ID == 0 {
-		t.Errorf("expected spot ID to be non-zero but got %v", resBody.ID)
+
+	resSpot := resBody.Spot
+	if resSpot.ID == 0 {
+		t.Errorf("expected spot ID to be non-zero but got %v", resSpot.ID)
 	}
-	if resBody.UserID != spot.UserID {
-		t.Errorf("expected spot user id to be %v but got %v", spot.UserID, resBody.UserID)
+	if resSpot.UserID != spot.UserID {
+		t.Errorf("expected spot user id to be %v but got %v", spot.UserID, resSpot.UserID)
 	}
-	if resBody.Name != spot.Name {
-		t.Errorf("expected spot name to be %v but got %v", spot.Name, resBody.Name)
+	if resSpot.Name != spot.Name {
+		t.Errorf("expected spot name to be %v but got %v", spot.Name, resSpot.Name)
 	}
-	if resBody.Image != spot.Image {
-		t.Errorf("expected spot image to be %v but got %v", spot.Image, resBody.Image)
+	if resSpot.Image != spot.Image {
+		t.Errorf("expected spot image to be %v but got %v", spot.Image, resSpot.Image)
 	}
-	if resBody.Type != spot.Type {
-		t.Errorf("expected spot type to be %v but got %v", spot.Type, resBody.Type)
+	if resSpot.Type != spot.Type {
+		t.Errorf("expected spot type to be %v but got %v", spot.Type, resSpot.Type)
 	}
-	if resBody.Address != spot.Address {
-		t.Errorf("expected spot address to be %v but got %v", spot.Address, resBody.Address)
+	if resSpot.Address != spot.Address {
+		t.Errorf("expected spot address to be %v but got %v", spot.Address, resSpot.Address)
 	}
-	if resBody.HpURL != spot.HpURL {
-		t.Errorf("expected spot HP URL to be %v but got %v", spot.HpURL, resBody.HpURL)
+	if resSpot.HpURL != spot.HpURL {
+		t.Errorf("expected spot HP URL to be %v but got %v", spot.HpURL, resSpot.HpURL)
 	}
-	if resBody.OpenTime != spot.OpenTime {
-		t.Errorf("expected spot open time to be %v but got %v", spot.OpenTime, resBody.OpenTime)
+	if resSpot.OpenTime != spot.OpenTime {
+		t.Errorf("expected spot open time to be %v but got %v", spot.OpenTime, resSpot.OpenTime)
 	}
-	if resBody.OffDay != spot.OffDay {
-		t.Errorf("expected spot off day to be %v but got %v", spot.OffDay, resBody.OffDay)
+	if resSpot.OffDay != spot.OffDay {
+		t.Errorf("expected spot off day to be %v but got %v", spot.OffDay, resSpot.OffDay)
 	}
-	if resBody.Parking != spot.Parking {
-		t.Errorf("expected spot parking to be %v but got %v", spot.Parking, resBody.Parking)
+	if resSpot.Parking != spot.Parking {
+		t.Errorf("expected spot parking to be %v but got %v", spot.Parking, resSpot.Parking)
 	}
-	if resBody.Description != spot.Description {
-		t.Errorf("expected spot description to be %v but got %v", spot.Description, resBody.Description)
+	if resSpot.Description != spot.Description {
+		t.Errorf("expected spot description to be %v but got %v", spot.Description, resSpot.Description)
 	}
-	if resBody.Lat != spot.Lat {
-		t.Errorf("expected spot lat to be %v but got %v", spot.Lat, resBody.Lat)
+	if resSpot.Lat != spot.Lat {
+		t.Errorf("expected spot lat to be %v but got %v", spot.Lat, resSpot.Lat)
 	}
-	if resBody.Lng != spot.Lng {
-		t.Errorf("expected spot lng to be %v but got %v", spot.Lng, resBody.Lng)
+	if resSpot.Lng != spot.Lng {
+		t.Errorf("expected spot lng to be %v but got %v", spot.Lng, resSpot.Lng)
 	}
 }
 
@@ -223,48 +227,56 @@ func TestUpdateSpot(t *testing.T) {
 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
 	}
 
-	var resBody Spot
+	resBody := ResponseBody{}
+	if err := json.Unmarshal([]byte(res.Body.Bytes()), &resBody); err != nil {
+		t.Fatalf("Failed to unmarshal response body: %v", err)
+		return
+	}
+
+	resSpot := resBody.Spot
+
+	// var resBody Spot
 	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
 		t.Fatalf("failed to unmarshal response body: %v", err)
 	}
-	if resBody.ID != spot.ID {
-		t.Errorf("expected spot ID to be %v but got %v", spot.ID, resBody.ID)
+	if resSpot.ID != spot.ID {
+		t.Errorf("expected spot ID to be %v but got %v", spot.ID, resSpot.ID)
 	}
-	if resBody.UserID != updatedSpot.UserID {
-		t.Errorf("expected spot user_id to be %v but got %v", updatedSpot.UserID, resBody.UserID)
+	if resSpot.UserID != updatedSpot.UserID {
+		t.Errorf("expected spot user_id to be %v but got %v", updatedSpot.UserID, resSpot.UserID)
 	}
-	if resBody.Name != updatedSpot.Name {
-		t.Errorf("expected spot name to be %v but got %v", updatedSpot.Name, resBody.Name)
+	if resSpot.Name != updatedSpot.Name {
+		t.Errorf("expected spot name to be %v but got %v", updatedSpot.Name, resSpot.Name)
 	}
-	if resBody.Image != updatedSpot.Image {
-		t.Errorf("expected spot Image to be %v but got %v", updatedSpot.Image, resBody.Image)
+	if resSpot.Image != updatedSpot.Image {
+		t.Errorf("expected spot Image to be %v but got %v", updatedSpot.Image, resSpot.Image)
 	}
-	if resBody.Type != updatedSpot.Type {
-		t.Errorf("expected spot Type to be %v but got %v", updatedSpot.Type, resBody.Type)
+	if resSpot.Type != updatedSpot.Type {
+		t.Errorf("expected spot Type to be %v but got %v", updatedSpot.Type, resSpot.Type)
 	}
-	if resBody.Address != updatedSpot.Address {
-		t.Errorf("expected spot Address to be %v but got %v", updatedSpot.Address, resBody.Address)
+	if resSpot.Address != updatedSpot.Address {
+		t.Errorf("expected spot Address to be %v but got %v", updatedSpot.Address, resSpot.Address)
 	}
-	if resBody.HpURL != updatedSpot.HpURL {
-		t.Errorf("expected spot HpURL to be %v but got %v", updatedSpot.HpURL, resBody.HpURL)
+	if resSpot.HpURL != updatedSpot.HpURL {
+		t.Errorf("expected spot HpURL to be %v but got %v", updatedSpot.HpURL, resSpot.HpURL)
 	}
-	if resBody.OpenTime != updatedSpot.OpenTime {
-		t.Errorf("expected spot OpenTime to be %v but got %v", updatedSpot.OpenTime, resBody.OpenTime)
+	if resSpot.OpenTime != updatedSpot.OpenTime {
+		t.Errorf("expected spot OpenTime to be %v but got %v", updatedSpot.OpenTime, resSpot.OpenTime)
 	}
-	if resBody.OffDay != updatedSpot.OffDay {
-		t.Errorf("expected spot OffDay to be %v but got %v", updatedSpot.OffDay, resBody.OffDay)
+	if resSpot.OffDay != updatedSpot.OffDay {
+		t.Errorf("expected spot OffDay to be %v but got %v", updatedSpot.OffDay, resSpot.OffDay)
 	}
-	if resBody.Parking != updatedSpot.Parking {
-		t.Errorf("expected spot Parking to be %v but got %v", updatedSpot.Parking, resBody.Parking)
+	if resSpot.Parking != updatedSpot.Parking {
+		t.Errorf("expected spot Parking to be %v but got %v", updatedSpot.Parking, resSpot.Parking)
 	}
-	if resBody.Description != updatedSpot.Description {
-		t.Errorf("expected spot Description to be %v but got %v", updatedSpot.Description, resBody.Description)
+	if resSpot.Description != updatedSpot.Description {
+		t.Errorf("expected spot Description to be %v but got %v", updatedSpot.Description, resSpot.Description)
 	}
-	if resBody.Lat != updatedSpot.Lat {
-		t.Errorf("expected spot Lat to be %v but got %v", updatedSpot.Lat, resBody.Lat)
+	if resSpot.Lat != updatedSpot.Lat {
+		t.Errorf("expected spot Lat to be %v but got %v", updatedSpot.Lat, resSpot.Lat)
 	}
-	if resBody.Lng != updatedSpot.Lng {
-		t.Errorf("expected spot Lng to be %v but got %v", updatedSpot.Lng, resBody.Lng)
+	if resSpot.Lng != updatedSpot.Lng {
+		t.Errorf("expected spot Lng to be %v but got %v", updatedSpot.Lng, resSpot.Lng)
 	}
 }
 
