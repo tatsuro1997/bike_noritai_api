@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type ResponseBody struct {
+type ResponseSpotBody struct {
 	Spot Spot `json:"spot"`
 }
 

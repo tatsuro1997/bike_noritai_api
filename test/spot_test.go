@@ -130,7 +130,7 @@ func TestCreateSpot(t *testing.T) {
 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
 	}
 
-	resBody := ResponseBody{}
+	resBody := ResponseSpotBody{}
 	if err := json.Unmarshal([]byte(res.Body.Bytes()), &resBody); err != nil {
 		t.Fatalf("Failed to unmarshal response body: %v", err)
 		return
@@ -227,7 +227,7 @@ func TestUpdateSpot(t *testing.T) {
 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
 	}
 
-	resBody := ResponseBody{}
+	resBody := ResponseSpotBody{}
 	if err := json.Unmarshal([]byte(res.Body.Bytes()), &resBody); err != nil {
 		t.Fatalf("Failed to unmarshal response body: %v", err)
 		return
