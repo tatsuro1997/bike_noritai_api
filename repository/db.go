@@ -149,25 +149,25 @@ func init() {
 	comments := []Comment{
 		{
 			UserID:   users[0].ID,
-			RecordID: 1,
+			SpotID: 1,
 			UserName: users[0].Name,
 			Text:     "AAAAAAAAAAAAAAA",
 		},
 		{
 			UserID:   users[0].ID,
-			RecordID: 1,
+			SpotID: 1,
 			UserName: users[0].Name,
 			Text:     "BBBBBBBBBBBBBBBBB",
 		},
 		{
 			UserID:   users[1].ID,
-			RecordID: 2,
+			SpotID: 2,
 			UserName: users[0].Name,
 			Text:     "CCCCCCCCCCCCCCCCC",
 		},
 		{
 			UserID:   users[1].ID,
-			RecordID: 2,
+			SpotID: 2,
 			UserName: users[0].Name,
 			Text:     "DDDDDDDDDDDDDDDDDD",
 		},

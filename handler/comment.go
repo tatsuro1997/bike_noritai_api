@@ -30,22 +30,46 @@ func GetUserComments(c echo.Context) error {
 	return c.JSON(http.StatusOK, comments)
 }
 
-func GetRecordComments(c echo.Context) error {
+// func GetRecordComments(c echo.Context) error {
+// 	comments := []Comment{}
+
+// 	recordID := c.Param("record_id")
+// 	if recordID == "" {
+// 		return c.JSON(http.StatusBadRequest, "record ID is required")
+// 	}
+
+// 	if err := DB.Where("record_id = ?", recordID).Find(&comments).Error; err != nil {
+// 		if errors.Is(err, gorm.ErrRecordNotFound) {
+// 			return c.JSON(http.StatusNotFound, "comments not found")
+// 		}
+// 		return err
+// 	}
+
+// 	return c.JSON(http.StatusOK, comments)
+// }
+
+func GetSpotComments(c echo.Context) error {
 	comments := []Comment{}
 
-	recordID := c.Param("record_id")
-	if recordID == "" {
-		return c.JSON(http.StatusBadRequest, "record ID is required")
+	spotID := c.Param("spot_id")
+	if spotID == "" {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
 	}
 
-	if err := DB.Where("record_id = ?", recordID).Find(&comments).Error; err != nil {
+	if err := DB.Where("spot_id = ?", spotID).Find(&comments).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.JSON(http.StatusNotFound, "comments not found")
 		}
 		return err
 	}
 
-	return c.JSON(http.StatusOK, comments)
+	response := map[string]interface{}{
+		"comments": comments,
+	}
+
+	return c.JSON(http.StatusOK, response)
+
+	// return c.JSON(http.StatusOK, comments)
 }
 
 func CreateComment(c echo.Context) error {
@@ -60,13 +84,13 @@ func CreateComment(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "user ID is required")
 	}
 
-	recordID, _ := strconv.ParseInt(c.Param("record_id"), 10, 64)
-	if recordID == 0 {
-		return c.JSON(http.StatusBadRequest, "record ID is required")
+	spotID, _ := strconv.ParseInt(c.Param("spot_id"), 10, 64)
+	if spotID == 0 {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
 	}
 
 	comment.UserID = userID
-	comment.RecordID = recordID
+	comment.SpotID = spotID
 
 	DB.Create(&comment)
 	return c.JSON(http.StatusCreated, comment)
@@ -80,9 +104,9 @@ func UpdateComment(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "user ID is required")
 	}
 
-	recordID, _ := strconv.ParseInt(c.Param("record_id"), 10, 64)
-	if recordID == 0 {
-		return c.JSON(http.StatusBadRequest, "record ID is required")
+	spotID, _ := strconv.ParseInt(c.Param("spot_id"), 10, 64)
+	if spotID == 0 {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
 	}
 
 	commentID := c.Param("comment_id")
@@ -98,8 +122,8 @@ func UpdateComment(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "user and comment do not match")
 	}
 
-	if comment.RecordID != recordID {
-		return c.JSON(http.StatusBadRequest, "record and comment do not match")
+	if comment.SpotID != spotID {
+		return c.JSON(http.StatusBadRequest, "spot and comment do not match")
 	}
 
 	if err := c.Bind(&comment); err != nil {
@@ -121,9 +145,9 @@ func DeleteComment(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "user ID is required")
 	}
 
-	recordID, _ := strconv.ParseInt(c.Param("record_id"), 10, 64)
-	if recordID == 0 {
-		return c.JSON(http.StatusBadRequest, "record ID is required")
+	spotID, _ := strconv.ParseInt(c.Param("spot_id"), 10, 64)
+	if spotID == 0 {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
 	}
 
 	commentID := c.Param("comment_id")
@@ -139,8 +163,8 @@ func DeleteComment(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "user and comment do not match")
 	}
 
-	if comment.RecordID != recordID {
-		return c.JSON(http.StatusBadRequest, "record and comment do not match")
+	if comment.SpotID != spotID {
+		return c.JSON(http.StatusBadRequest, "spot and comment do not match")
 	}
 
 	if err := DB.Where("id = ?", commentID).Delete(&comment).Error; err != nil {

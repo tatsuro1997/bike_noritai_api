@@ -26,9 +26,9 @@ func TestGetUserComments(t *testing.T) {
 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
 	}
 
-	expectedBody := `"id":1,"user_id":1,"record_id":1,"user_name":"tester1","text":"AAAAAAAAAAAAAAA"`
+	expectedBody := `"id":1,"user_id":1,"spot_id":1,"user_name":"tester1","text":"AAAAAAAAAAAAAAA"`
 
-	expectedBody2 := `"id":2,"user_id":1,"record_id":1,"user_name":"tester1","text":"BBBBBBBBBBBBBBBBB"`
+	expectedBody2 := `"id":2,"user_id":1,"spot_id":1,"user_name":"tester1","text":"BBBBBBBBBBBBBBBBB"`
 
 	if !strings.Contains(res.Body.String(), expectedBody) {
 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
@@ -41,7 +41,7 @@ func TestGetUserComments(t *testing.T) {
 
 func TestGetRecordComments(t *testing.T) {
 	router := NewRouter()
-	req := httptest.NewRequest(http.MethodGet, "/api/records/2/comments", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/spots/2/comments", nil)
 	res := httptest.NewRecorder()
 	router.ServeHTTP(res, req)
 
@@ -49,9 +49,9 @@ func TestGetRecordComments(t *testing.T) {
 		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
 	}
 
-	expectedBody := `"id":3,"user_id":2,"record_id":2,"user_name":"tester1","text":"CCCCCCCCCCCCCCCCC"`
+	expectedBody := `"id":3,"user_id":2,"spot_id":2,"user_name":"tester1","text":"CCCCCCCCCCCCCCCCC"`
 
-	expectedBody2 := `"id":4,"user_id":2,"record_id":2,"user_name":"tester1","text":"DDDDDDDDDDDDDDDDDD"`
+	expectedBody2 := `"id":4,"user_id":2,"spot_id":2,"user_name":"tester1","text":"DDDDDDDDDDDDDDDDDD"`
 
 	if !strings.Contains(res.Body.String(), expectedBody) {
 		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
@@ -76,9 +76,9 @@ func TestCreateComment(t *testing.T) {
 	}
 
 	var userID int64 = 1
-	var recordID int64 = 1
+	var spotID int64 = 1
 
-	req := httptest.NewRequest(http.MethodPost, "/api/users/"+strconv.Itoa(int(userID))+"/records/"+strconv.Itoa(int(recordID))+"/comments", bytes.NewBuffer(reqBody))
+	req := httptest.NewRequest(http.MethodPost, "/api/users/"+strconv.Itoa(int(userID))+"/records/"+strconv.Itoa(int(spotID))+"/comments", bytes.NewBuffer(reqBody))
 	req.Header.Set("Content-Type", "application/json")
 	res := httptest.NewRecorder()
 	router.ServeHTTP(res, req)
@@ -97,8 +97,8 @@ func TestCreateComment(t *testing.T) {
 	if resBody.UserID != userID {
 		t.Errorf("expected comment user id to be %v but got %v", userID, resBody.UserID)
 	}
-	if resBody.RecordID != recordID {
-		t.Errorf("expected comment record id to be %v but got %v", recordID, resBody.RecordID)
+	if resBody.SpotID != spotID {
+		t.Errorf("expected comment spot id to be %v but got %v", spotID, resBody.SpotID)
 	}
 	if resBody.UserName != comment.UserName {
 		t.Errorf("expected comment user name to be %v but got %v", comment.UserName, resBody.UserName)
@@ -111,7 +111,7 @@ func TestCreateComment(t *testing.T) {
 func TestUpdateComment(t *testing.T) {
 	comment := Comment{
 		UserID:   1,
-		RecordID: 1,
+		SpotID: 1,
 		UserName: "Tester",
 		Text:     "FFFFFFFFFFF",
 	}
@@ -122,7 +122,7 @@ func TestUpdateComment(t *testing.T) {
 	updatedComment := Comment{
 		ID:       comment.ID,
 		UserID:   1,
-		RecordID: 1,
+		SpotID: 1,
 		UserName: "Update Tester",
 		Text:     "GGGGGGGGGGGG",
 	}
@@ -132,7 +132,7 @@ func TestUpdateComment(t *testing.T) {
 	}
 
 	router := NewRouter()
-	req := httptest.NewRequest(http.MethodPatch, "/api/users/"+strconv.Itoa(int(comment.UserID))+"/records/"+strconv.Itoa(int(comment.RecordID))+"/comments/"+strconv.Itoa(int(comment.ID)), bytes.NewBuffer(reqBody))
+	req := httptest.NewRequest(http.MethodPatch, "/api/users/"+strconv.Itoa(int(comment.UserID))+"/records/"+strconv.Itoa(int(comment.SpotID))+"/comments/"+strconv.Itoa(int(comment.ID)), bytes.NewBuffer(reqBody))
 	req.Header.Set("Content-Type", "application/json")
 	res := httptest.NewRecorder()
 	router.ServeHTTP(res, req)
@@ -148,8 +148,8 @@ func TestUpdateComment(t *testing.T) {
 	if resBody.UserID != updatedComment.UserID {
 		t.Errorf("expected comment user id to be %v but got %v", updatedComment.UserID, resBody.UserID)
 	}
-	if resBody.UserID != updatedComment.RecordID {
-		t.Errorf("expected comment record id to be %v but got %v", updatedComment.RecordID, resBody.UserID)
+	if resBody.UserID != updatedComment.SpotID {
+		t.Errorf("expected comment record id to be %v but got %v", updatedComment.SpotID, resBody.UserID)
 	}
 	if resBody.UserName != updatedComment.UserName {
 		t.Errorf("expected comment user name to be %v but got %v", updatedComment.UserName, resBody.UserName)
