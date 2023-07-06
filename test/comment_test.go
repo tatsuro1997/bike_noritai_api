@@ -78,7 +78,7 @@ func TestCreateComment(t *testing.T) {
 	var userID int64 = 1
 	var spotID int64 = 1
 
-	req := httptest.NewRequest(http.MethodPost, "/api/users/"+strconv.Itoa(int(userID))+"/records/"+strconv.Itoa(int(spotID))+"/comments", bytes.NewBuffer(reqBody))
+	req := httptest.NewRequest(http.MethodPost, "/api/users/"+strconv.Itoa(int(userID))+"/spots/"+strconv.Itoa(int(spotID))+"/comments", bytes.NewBuffer(reqBody))
 	req.Header.Set("Content-Type", "application/json")
 	res := httptest.NewRecorder()
 	router.ServeHTTP(res, req)
@@ -111,7 +111,7 @@ func TestCreateComment(t *testing.T) {
 func TestUpdateComment(t *testing.T) {
 	comment := Comment{
 		UserID:   1,
-		SpotID: 1,
+		SpotID:   1,
 		UserName: "Tester",
 		Text:     "FFFFFFFFFFF",
 	}
@@ -122,7 +122,7 @@ func TestUpdateComment(t *testing.T) {
 	updatedComment := Comment{
 		ID:       comment.ID,
 		UserID:   1,
-		SpotID: 1,
+		SpotID:   1,
 		UserName: "Update Tester",
 		Text:     "GGGGGGGGGGGG",
 	}
@@ -132,7 +132,7 @@ func TestUpdateComment(t *testing.T) {
 	}
 
 	router := NewRouter()
-	req := httptest.NewRequest(http.MethodPatch, "/api/users/"+strconv.Itoa(int(comment.UserID))+"/records/"+strconv.Itoa(int(comment.SpotID))+"/comments/"+strconv.Itoa(int(comment.ID)), bytes.NewBuffer(reqBody))
+	req := httptest.NewRequest(http.MethodPatch, "/api/users/"+strconv.Itoa(int(comment.UserID))+"/spots/"+strconv.Itoa(int(comment.SpotID))+"/comments/"+strconv.Itoa(int(comment.ID)), bytes.NewBuffer(reqBody))
 	req.Header.Set("Content-Type", "application/json")
 	res := httptest.NewRecorder()
 	router.ServeHTTP(res, req)
@@ -161,7 +161,7 @@ func TestUpdateComment(t *testing.T) {
 
 func TestDeleteComment(t *testing.T) {
 	router := NewRouter()
-	req := httptest.NewRequest(http.MethodDelete, "/api/users/1/records/1/comments/1", nil)
+	req := httptest.NewRequest(http.MethodDelete, "/api/users/1/spots/1/comments/1", nil)
 	res := httptest.NewRecorder()
 	router.ServeHTTP(res, req)
 

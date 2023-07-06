@@ -35,9 +35,9 @@ func NewRouter() *echo.Echo {
 
 	e.GET("/api/users/:user_id/comments", handler.GetUserComments)
 	e.GET("/api/spots/:spot_id/comments", handler.GetSpotComments)
-	e.POST("/api/users/:user_id/records/:record_id/comments", handler.CreateComment)
-	e.PATCH("/api/users/:user_id/records/:record_id/comments/:comment_id", handler.UpdateComment)
-	e.DELETE("/api/users/:user_id/records/:record_id/comments/:comment_id", handler.DeleteComment)
+	e.POST("/api/users/:user_id/spots/:spot_id/comments", handler.CreateComment)
+	e.PATCH("/api/users/:user_id/spots/:spot_id/comments/:comment_id", handler.UpdateComment)
+	e.DELETE("/api/users/:user_id/spots/:spot_id/comments/:comment_id", handler.DeleteComment)
 
 	// COMFIRMME: unnecessary?
 	e.GET("/api/users/:user_id/bookmarks", handler.GetBookmarks)
