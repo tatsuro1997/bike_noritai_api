@@ -38,7 +38,7 @@ func CreateLike(c echo.Context) error {
 	DB.Create(&like)
 
 	response := map[string]interface{}{
-		"likes": like,
+		"like": like,
 	}
 
 	return c.JSON(http.StatusCreated, response)

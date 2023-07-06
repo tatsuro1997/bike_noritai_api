@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -61,18 +62,23 @@ func TestCreateLike(t *testing.T) {
 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
 	}
 
-	var resBody Like
-	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
+	resBody := ResponseLikeBody{}
+	if err := json.Unmarshal([]byte(res.Body.Bytes()), &resBody); err != nil {
 		t.Fatalf("failed to unmarshal response body: %v", err)
 	}
-	if resBody.ID == 0 {
-		t.Errorf("expected spot ID to be non-zero but got %v", resBody.ID)
+
+	log.Println("######## test #########")
+	log.Println(resBody.Like)
+
+	resLike := resBody.Like
+	if resLike.ID == 0 {
+		t.Errorf("expected spot ID to be non-zero but got %v", resLike.ID)
 	}
-	if resBody.UserID != like.UserID {
-		t.Errorf("expected comment user id to be %v but got %v", like.UserID, resBody.UserID)
+	if resLike.UserID != like.UserID {
+		t.Errorf("expected comment user id to be %v but got %v", like.UserID, resLike.UserID)
 	}
-	if resBody.RecordID != like.RecordID {
-		t.Errorf("expected comment record id to be %v but got %v", like.RecordID, resBody.RecordID)
+	if resLike.RecordID != like.RecordID {
+		t.Errorf("expected comment record id to be %v but got %v", like.RecordID, resLike.RecordID)
 	}
 }
 
