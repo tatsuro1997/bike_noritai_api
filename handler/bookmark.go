@@ -31,7 +31,6 @@ func GetBookmarks(c echo.Context) error {
 	return c.JSON(http.StatusOK, bookmarks)
 }
 
-// TODO: add test
 func GetSpotBookmarks(c echo.Context) error {
 	bookmarks := []Bookmark{}
 

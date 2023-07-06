@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -66,9 +65,6 @@ func TestCreateLike(t *testing.T) {
 	if err := json.Unmarshal([]byte(res.Body.Bytes()), &resBody); err != nil {
 		t.Fatalf("failed to unmarshal response body: %v", err)
 	}
-
-	log.Println("######## test #########")
-	log.Println(resBody.Like)
 
 	resLike := resBody.Like
 	if resLike.ID == 0 {

@@ -37,6 +37,28 @@ func TestGetBookmarks(t *testing.T) {
 	}
 }
 
+func TestGetSpotBookmarks(t *testing.T) {
+	router := NewRouter()
+	req := httptest.NewRequest(http.MethodGet, "/api/spots/1/bookmarks", nil)
+	res := httptest.NewRecorder()
+	router.ServeHTTP(res, req)
+
+	if res.Code != http.StatusOK {
+		t.Errorf("unexpected status code: got %v, want %v", res.Code, http.StatusOK)
+	}
+
+	expectedBody := `"id":1,"user_id":1,"spot_id":1`
+	expectedBody2 := `"id":3,"user_id":2,"spot_id":1,`
+
+	if !strings.Contains(res.Body.String(), expectedBody) {
+		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody)
+	}
+
+	if !strings.Contains(res.Body.String(), expectedBody2) {
+		t.Errorf("unexpected response body: got %v, want %v", res.Body.String(), expectedBody2)
+	}
+}
+
 func TestCreateBookmark(t *testing.T) {
 	router := NewRouter()
 
