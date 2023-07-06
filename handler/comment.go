@@ -30,24 +30,6 @@ func GetUserComments(c echo.Context) error {
 	return c.JSON(http.StatusOK, comments)
 }
 
-// func GetRecordComments(c echo.Context) error {
-// 	comments := []Comment{}
-
-// 	recordID := c.Param("record_id")
-// 	if recordID == "" {
-// 		return c.JSON(http.StatusBadRequest, "record ID is required")
-// 	}
-
-// 	if err := DB.Where("record_id = ?", recordID).Find(&comments).Error; err != nil {
-// 		if errors.Is(err, gorm.ErrRecordNotFound) {
-// 			return c.JSON(http.StatusNotFound, "comments not found")
-// 		}
-// 		return err
-// 	}
-
-// 	return c.JSON(http.StatusOK, comments)
-// }
-
 func GetSpotComments(c echo.Context) error {
 	comments := []Comment{}
 
@@ -68,8 +50,6 @@ func GetSpotComments(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, response)
-
-	// return c.JSON(http.StatusOK, comments)
 }
 
 func CreateComment(c echo.Context) error {

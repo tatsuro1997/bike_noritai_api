@@ -9,10 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	// "github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 
-	// . "bike_noritai_api/handler"
 	. "bike_noritai_api/model"
 	. "bike_noritai_api/repository"
 	. "bike_noritai_api/router"
