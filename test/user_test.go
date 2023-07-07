@@ -94,36 +94,39 @@ func TestCreateUser(t *testing.T) {
 		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
 	}
 
-	var resBody User
-	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
-		t.Fatalf("failed to unmarshal response body: %v", err)
+	resBody := ResponseUserBody{}
+	if err := json.Unmarshal([]byte(res.Body.Bytes()), &resBody); err != nil {
+		t.Fatalf("Failed to unmarshal response body: %v", err)
+		return
 	}
-	if resBody.ID == 0 {
-		t.Errorf("expected user ID to be non-zero but got %v", resBody.ID)
+
+	resUser := resBody.User
+	if resUser.ID == 0 {
+		t.Errorf("expected user ID to be non-zero but got %v", resUser.ID)
 	}
-	if resBody.Name != user.Name {
-		t.Errorf("expected user name to be %v but got %v", user.Name, resBody.Name)
+	if resUser.Name != user.Name {
+		t.Errorf("expected user name to be %v but got %v", user.Name, resUser.Name)
 	}
-	if resBody.Email != user.Email {
-		t.Errorf("expected user email to be %v but got %v", user.Email, resBody.Email)
+	if resUser.Email != user.Email {
+		t.Errorf("expected user email to be %v but got %v", user.Email, resUser.Email)
 	}
-	if resBody.Password != user.Password {
-		t.Errorf("expected user password to be %v but got %v", user.Password, resBody.Password)
+	if resUser.Password != user.Password {
+		t.Errorf("expected user password to be %v but got %v", user.Password, resUser.Password)
 	}
-	if resBody.Area != user.Area {
-		t.Errorf("expected user area to be %v but got %v", user.Area, resBody.Area)
+	if resUser.Area != user.Area {
+		t.Errorf("expected user area to be %v but got %v", user.Area, resUser.Area)
 	}
-	if resBody.Prefecture != user.Prefecture {
-		t.Errorf("expected user prefecture to be %v but got %v", user.Prefecture, resBody.Prefecture)
+	if resUser.Prefecture != user.Prefecture {
+		t.Errorf("expected user prefecture to be %v but got %v", user.Prefecture, resUser.Prefecture)
 	}
-	if resBody.Url != user.Url {
-		t.Errorf("expected user url to be %v but got %v", user.Url, resBody.Url)
+	if resUser.Url != user.Url {
+		t.Errorf("expected user url to be %v but got %v", user.Url, resUser.Url)
 	}
-	if resBody.BikeName != user.BikeName {
-		t.Errorf("expected user bike name to be %v but got %v", user.BikeName, resBody.BikeName)
+	if resUser.BikeName != user.BikeName {
+		t.Errorf("expected user bike name to be %v but got %v", user.BikeName, resUser.BikeName)
 	}
-	if resBody.Experience != user.Experience {
-		t.Errorf("expected user experience to be %v but got %v", user.Experience, resBody.Experience)
+	if resUser.Experience != user.Experience {
+		t.Errorf("expected user experience to be %v but got %v", user.Experience, resUser.Experience)
 	}
 }
 
@@ -170,40 +173,42 @@ func TestUpdateUser(t *testing.T) {
 		t.Fatalf("failed to update user: %v", err)
 	}
 
-	if res.Code != http.StatusCreated {
-		t.Errorf("expected status code %v but got %v", http.StatusCreated, res.Code)
+	resBody := ResponseUserBody{}
+	if err := json.Unmarshal([]byte(res.Body.Bytes()), &resBody); err != nil {
+		t.Fatalf("Failed to unmarshal response body: %v", err)
+		return
 	}
 
-	var resBody User
+	resUser := resBody.User
 	if err := json.Unmarshal(res.Body.Bytes(), &resBody); err != nil {
 		t.Fatalf("failed to unmarshal response body: %v", err)
 	}
-	if resBody.ID != user.ID {
-		t.Errorf("expected user ID to be %v but got %v", user.ID, resBody.ID)
+	if resUser.ID != user.ID {
+		t.Errorf("expected user ID to be %v but got %v", user.ID, resUser.ID)
 	}
-	if resBody.Name != updatedUser.Name {
-		t.Errorf("expected user name to be %v but got %v", updatedUser.Name, resBody.Name)
+	if resUser.Name != updatedUser.Name {
+		t.Errorf("expected user name to be %v but got %v", updatedUser.Name, resUser.Name)
 	}
-	if resBody.Email != updatedUser.Email {
-		t.Errorf("expected user email to be %v but got %v", updatedUser.Email, resBody.Email)
+	if resUser.Email != updatedUser.Email {
+		t.Errorf("expected user email to be %v but got %v", updatedUser.Email, resUser.Email)
 	}
-	if resBody.Password != updatedUser.Password {
-		t.Errorf("expected user password to be %v but got %v", updatedUser.Password, resBody.Password)
+	if resUser.Password != updatedUser.Password {
+		t.Errorf("expected user password to be %v but got %v", updatedUser.Password, resUser.Password)
 	}
-	if resBody.Area != updatedUser.Area {
-		t.Errorf("expected user area to be %v but got %v", updatedUser.Area, resBody.Area)
+	if resUser.Area != updatedUser.Area {
+		t.Errorf("expected user area to be %v but got %v", updatedUser.Area, resUser.Area)
 	}
-	if resBody.Prefecture != updatedUser.Prefecture {
-		t.Errorf("expected user prefecture to be %v but got %v", updatedUser.Prefecture, resBody.Prefecture)
+	if resUser.Prefecture != updatedUser.Prefecture {
+		t.Errorf("expected user prefecture to be %v but got %v", updatedUser.Prefecture, resUser.Prefecture)
 	}
-	if resBody.Url != updatedUser.Url {
-		t.Errorf("expected user url to be %v but got %v", updatedUser.Url, resBody.Url)
+	if resUser.Url != updatedUser.Url {
+		t.Errorf("expected user url to be %v but got %v", updatedUser.Url, resUser.Url)
 	}
-	if resBody.BikeName != updatedUser.BikeName {
-		t.Errorf("expected user bike_name to be %v but got %v", updatedUser.BikeName, resBody.BikeName)
+	if resUser.BikeName != updatedUser.BikeName {
+		t.Errorf("expected user bike_name to be %v but got %v", updatedUser.BikeName, resUser.BikeName)
 	}
-	if resBody.Experience != updatedUser.Experience {
-		t.Errorf("expected user experience to be %v but got %v", updatedUser.Experience, resBody.Experience)
+	if resUser.Experience != updatedUser.Experience {
+		t.Errorf("expected user experience to be %v but got %v", updatedUser.Experience, resUser.Experience)
 	}
 }
 

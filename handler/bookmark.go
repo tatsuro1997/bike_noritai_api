@@ -12,6 +12,7 @@ import (
 	. "bike_noritai_api/repository"
 )
 
+// COMFIRMME: unnecessary?
 func GetBookmarks(c echo.Context) error {
 	bookmarks := []Bookmark{}
 
@@ -28,6 +29,28 @@ func GetBookmarks(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, bookmarks)
+}
+
+func GetSpotBookmarks(c echo.Context) error {
+	bookmarks := []Bookmark{}
+
+	spotID := c.Param("spot_id")
+	if spotID == "" {
+		return c.JSON(http.StatusBadRequest, "spot ID is required")
+	}
+
+	if err := DB.Where("spot_id = ?", spotID).Find(&bookmarks).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(http.StatusNotFound, "bookmarks not found")
+		}
+		return err
+	}
+
+	response := map[string]interface{}{
+		"bookmarks": bookmarks,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func CreateBookmark(c echo.Context) error {

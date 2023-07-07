@@ -18,7 +18,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                type: object
+                properties:
+                  users:
+                    $ref: "#/components/schemas/User"
     post:
       description: ユーザー登録
       operationId: UserCreate
@@ -40,7 +43,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
     patch:
       description: ユーザー更新
       operationId: UserUpdate
@@ -70,7 +76,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Spot"
+                type: object
+                properties:
+                  spots:
+                    $ref: "#/components/schemas/Spot"
 
   "/api/spots/{spot_id}":
     get:
@@ -84,7 +93,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Spot"
+                type: object
+                properties:
+                  spot:
+                    $ref: "#/components/schemas/Spot"
 
   "/api/users/{user_id}/spots":
     get:
@@ -100,7 +112,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Spot"
+                type: object
+                properties:
+                  spots:
+                    $ref: "#/components/schemas/Spot"
     post:
       description: スポット登録
       operationId: SpotCreate
@@ -143,6 +158,21 @@ paths:
         "204":
           description: No Content
 
+  "/api/records":
+    get:
+      description: ツーリング記録一覧取得
+      operationId: RecordIndex
+      responses:
+        "200":
+          description: ツーリング記録データ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  records:
+                    $ref: "#/components/schemas/Record"
+
   "/api/users/{user_id}/records":
     get:
       description: ツーリング記録一覧取得
@@ -157,7 +187,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Record"
+                type: object
+                properties:
+                  records:
+                    $ref: "#/components/schemas/Record"
 
   "/api/spots/{spot_id}/records":
     get:
@@ -173,7 +206,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Record"
+                type: object
+                properties:
+                  records:
+                    $ref: "#/components/schemas/Record"
 
   "/api/records/{record_id}":
     get:
@@ -189,7 +225,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Record"
+                type: object
+                properties:
+                  record:
+                    $ref: "#/components/schemas/Record"
 
   "/api/users/{user_id}/spots/{spot_id}/records":
     post:
@@ -234,26 +273,38 @@ paths:
         "204":
           description: No Content
 
-  "/api/users/{user_id}/records/{record_id}/record_likes":
+  "/api/likes":
     get:
-      description: ツーリングいいね数
-      operationId: RecordLikeCount
-      parameters:
-        [
-          $ref: "#/components/parameters/UserId",
-          $ref: "#/components/parameters/RecordId"
-        ]
+      description: ツーリングいいね
+      operationId: LikeIndex
       responses:
         "200":
-          description: ツーリング記録データ数
+          description: ツーリングいいね
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  count:
-                    type: integer
-                    format: int64
+                  likes:
+                    $ref: "#/components/schemas/Like"
+
+  "/api/like":
+    post:
+      description: ツーリングいいね作成
+      operationId: LikeCreate
+      requestBody:
+        $ref: "#/components/requestBodies/Like"
+      responses:
+        "201":
+          description: Created
+    delete:
+      description: ツーリングいいね削除
+      operationId: LikeDelete
+      requestBody:
+        $ref: "#/components/requestBodies/Like"
+      responses:
+        "204":
+          description: No content
 
   "/api/users/{user_id}/comments":
     get:
@@ -269,7 +320,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Comment"
+                type: object
+                properties:
+                  comments:
+                    $ref: "#/components/schemas/Comment"
 
   "/api/records/{record_id}/comments":
     get:
@@ -285,7 +339,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Comment"
+                type: object
+                properties:
+                  comments:
+                    $ref: "#/components/schemas/Comment"
 
   "/api/users/{user_id}/records/{record_id}/comments":
     post:
@@ -343,7 +400,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Bookmark"
+                type: object
+                properties:
+                  bookmarks:
+                    $ref: "#/components/schemas/Bookmark"
   "/api/users/{user_id}/spots/{spot_id}/bookmarks":
     post:
       description: ブックマーク作成
@@ -489,19 +549,19 @@ components:
                 format: float
               description:
                 type: string
-    RecordLike:
+    Like:
       content:
         application/json:
           schema:
             type: object
             required:
               - "user_id"
-              - "spot_id"
+              - "record_id"
             properties:
               user_id:
                 type: integer
                 format: int64
-              spot_id:
+              record_id:
                 type: integer
                 format: int64
     Comment:
@@ -636,7 +696,7 @@ components:
           type: string
           format: date-time
 
-    RecordLike:
+    Like:
       type: object
       properties:
         id:
@@ -645,7 +705,7 @@ components:
         user_id:
           type: integer
           format: int64
-        spot_id:
+        record_id:
           type: integer
           format: int64
         created_at:

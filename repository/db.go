@@ -3,7 +3,6 @@ package repository
 import (
 	"log"
 	"os"
-	"time"
 
 	. "bike_noritai_api/model"
 
@@ -38,12 +37,14 @@ func init() {
 	DB.Migrator().DropTable(&Record{})
 	DB.Migrator().DropTable(&Comment{})
 	DB.Migrator().DropTable(&Bookmark{})
+	DB.Migrator().DropTable(&Like{})
 
 	DB.AutoMigrate(&User{})
 	DB.AutoMigrate(&Spot{})
 	DB.AutoMigrate(&Record{})
 	DB.AutoMigrate(&Comment{})
 	DB.AutoMigrate(&Bookmark{})
+	DB.AutoMigrate(&Like{})
 
 	users := []User{
 		{
@@ -73,7 +74,7 @@ func init() {
 		{
 			UserID:      1,
 			Name:        "豊受大神宮 (伊勢神宮 外宮）",
-			Image:       "http://test.com",
+			Image:       "",
 			Type:        "観光",
 			Address:     "三重県伊勢市豊川町２７９",
 			HpURL:       "https://www.isejingu.or.jp/about/geku/",
@@ -87,7 +88,7 @@ func init() {
 		{
 			UserID:      1,
 			Name:        "伊勢神宮（内宮）",
-			Image:       "http://test.com",
+			Image:       "",
 			Type:        "観光",
 			Address:     "三重県伊勢市宇治館町１",
 			HpURL:       "https://www.isejingu.or.jp/",
@@ -105,7 +106,7 @@ func init() {
 		{
 			UserID:      users[0].ID,
 			SpotID:      spots[0].ID,
-			Date:        time.Now().Format("2023-01-01"),
+			Date:        "2023-01-01",
 			Weather:     "晴れ",
 			Temperature: 23.4,
 			RunningTime: 4,
@@ -115,7 +116,7 @@ func init() {
 		{
 			UserID:      users[0].ID,
 			SpotID:      spots[1].ID,
-			Date:        time.Now().Format("2023-01-01"),
+			Date:        "2023-01-01",
 			Weather:     "曇り",
 			Temperature: 26.1,
 			RunningTime: 7,
@@ -125,7 +126,7 @@ func init() {
 		{
 			UserID:      users[1].ID,
 			SpotID:      spots[0].ID,
-			Date:        time.Now().Format("2023-01-01"),
+			Date:        "2023-01-01",
 			Weather:     "雨",
 			Temperature: 13.4,
 			RunningTime: 2,
@@ -135,7 +136,7 @@ func init() {
 		{
 			UserID:      users[1].ID,
 			SpotID:      spots[1].ID,
-			Date:        time.Now().Format("2023-01-01"),
+			Date:        "2023-01-01",
 			Weather:     "晴れ",
 			Temperature: 33.4,
 			RunningTime: 6,
@@ -148,25 +149,25 @@ func init() {
 	comments := []Comment{
 		{
 			UserID:   users[0].ID,
-			RecordID: 1,
+			SpotID:   1,
 			UserName: users[0].Name,
 			Text:     "AAAAAAAAAAAAAAA",
 		},
 		{
 			UserID:   users[0].ID,
-			RecordID: 1,
+			SpotID:   1,
 			UserName: users[0].Name,
 			Text:     "BBBBBBBBBBBBBBBBB",
 		},
 		{
 			UserID:   users[1].ID,
-			RecordID: 2,
+			SpotID:   2,
 			UserName: users[0].Name,
 			Text:     "CCCCCCCCCCCCCCCCC",
 		},
 		{
 			UserID:   users[1].ID,
-			RecordID: 2,
+			SpotID:   2,
 			UserName: users[0].Name,
 			Text:     "DDDDDDDDDDDDDDDDDD",
 		},
@@ -192,4 +193,32 @@ func init() {
 		},
 	}
 	DB.Create(&bookmarks)
+
+	likes := []Like{
+		{
+			UserID:   users[0].ID,
+			RecordID: records[0].ID,
+		},
+		{
+			UserID:   users[0].ID,
+			RecordID: records[1].ID,
+		},
+		{
+			UserID:   users[0].ID,
+			RecordID: records[2].ID,
+		},
+		{
+			UserID:   users[0].ID,
+			RecordID: records[3].ID,
+		},
+		{
+			UserID:   users[1].ID,
+			RecordID: records[0].ID,
+		},
+		{
+			UserID:   users[1].ID,
+			RecordID: records[1].ID,
+		},
+	}
+	DB.Create(&likes)
 }
